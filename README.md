@@ -4,15 +4,14 @@
 
 An extension for Regex Search in lieu of Chrome's CTRL+F.
 
+<img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/regex.png" />
+<br />
 Instead of writing a program to download a web page to find regex matches, use 
 this simple program to highlight regex matches on the web page dynamically.
 
 Offers customizable highlighting and instantaneous search.
 
 ## Screenshots
-<img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/regex.png" />
-<br />
-Regex Search
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/googlenews.png" />
 Four letter words
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/googleflights.png" />
@@ -35,7 +34,7 @@ TBD
 <br />
 <b>SHIFT+ENTER</b> : select previous regex match on page
 
-Make a keyboard shortcut to open the popup:
+<b>Make a keyboard shortcut to open the popup:</b>
 <br />
 In your browser, go to chrome://extensions/
 <br />
@@ -48,6 +47,8 @@ Find this extension and click the box corresponding to 'Activate this extension'
 <br />
 Type your custom command (ie CTRL+SHIFT+F) and press 'OK'
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/setupkeyboardshortcuts3.png" />
+<br />
+Now whenever, you want to open the popup simply enter your custom command.
 
 ## License
 
