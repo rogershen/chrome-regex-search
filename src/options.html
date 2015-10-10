@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Chrome Regex Search Options</title>
+    <script src="js/options.js"></script>
+    <style type="text/css">
+      .status-chrome-regex {
+        color: #FF0000;
+      }
+      .example-chrome-regex {
+        font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      }
+      .panel {
+        margin-bottom: 20px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+                box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+      }
+      .panel-body {
+        padding: 15px;
+      }
+      .panel-heading {
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+      }
+      .panel-default {
+        border-color: #ddd;
+      }
+      .panel-default > .panel-heading {
+        color: #333;
+        background-color: #f5f5f5;
+        border-color: #ddd;
+      }
+      .panel-default > .panel-heading + .panel-collapse .panel-body {
+        border-top-color: #ddd;
+      }
+      .panel-default > .panel-footer + .panel-collapse .panel-body {
+        border-bottom-color: #ddd;
+      }
+      .panel-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 16px;
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body id="options">
+    <div class = "panel panel-default">
+      <div class="panel-heading"><h3 class="panel-title">Chrome Regex Search Settings</h3></div>
+      <div class="panel-body">
+        <div class="panel panel-default">
+          <div class="panel-heading">What colors should be used to highlight regex matches on the web page?</div>
+          <div class="panel-body">
+            <p><input id="highlightColor" type="color" /> <label for="highlightColor">Highlight color</label></p>
+            <p><input id="selectedColor" type="color" /> <label for="selectedColor">Selected color</label></p>
+            <p><input id="textColor" type="color" /> <label for="colorText">Text color</label></p>
+            <br />
+            <p class="example-chrome-regex">This is <span id = "exampleHighlighted"> highlighted</span> text.</p>
+            <p class="example-chrome-regex">This is <span id = "exampleSelected"> selected</span> text.</p>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Should results be highlighted instantaneously as you type (like Google Instant)?</div>
+          <div class="panel-body">
+            <input id="instantResults" type="checkbox" /> <label for="instantResults">Instant highlighting</label>
+            <br /><br />
+            <small>When this is disabled, you must press 'Enter' to trigger a search for regex matches.</small>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">What's the maximum number of regex matches that should be highlighted on the web page?</div>
+          <div class="panel-body">
+            <label for="maxResults">Max results</label> <input id="maxResults" type="text" name="maxResults" ></input>
+            <br /><br />
+            <small>The smaller this number is, the better your performance (especially for complex pages).</small>
+          </div>
+        </div>
+        <button id="buttonSave" type="save">Save Settings</button>
+        <button id="buttonReset" type="reset">Reset to Defaults</button>
+        <p id="status" class="status-chrome-regex"></p>
+      </div>
+    </div>
+  </body>
+</html>
