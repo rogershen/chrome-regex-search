@@ -10,9 +10,9 @@ this simple program to highlight regex matches on the web page dynamically.
 Offers customizable highlighting and instantaneous search.
 
 ## Screenshots
-
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/regex.png" />
 Regex Search
+<br />
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/googlenews.png" />
 Four letter words
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/googleflights.png" />
@@ -32,11 +32,15 @@ TBD
 
 ## Keyboard Shortcuts
 <b>ENTER</b> : select next regex match on page
+<br />
 <b>SHIFT+ENTER</b> : select previous regex match on page
 
 Make a keyboard shortcut to open the popup:
+<br />
 In your browser, go to chrome://extensions/
+<br />
 Scroll down to the bottom
+<br />
 Click 'Keyboard Shortcuts'
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/setupkeyboardshortcuts1.png" />
 Find this extension and click the box corresponding to 'Activate this extension'
