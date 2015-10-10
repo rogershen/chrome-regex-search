@@ -11,8 +11,8 @@ Offers customizable highlighting and instantaneous search.
 
 ## Screenshots
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/regex.png" />
-Regex Search
 <br />
+Regex Search
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/googlenews.png" />
 Four letter words
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/googleflights.png" />
@@ -45,6 +45,7 @@ Click 'Keyboard Shortcuts'
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/setupkeyboardshortcuts1.png" />
 Find this extension and click the box corresponding to 'Activate this extension'
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/setupkeyboardshortcuts2.png" />
+<br />
 Type your custom command (ie CTRL+SHIFT+F) and press 'OK'
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/setupkeyboardshortcuts3.png" />
 
