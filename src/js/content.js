@@ -9,6 +9,7 @@ var DEFAULT_MAX_RESULTS = 500;
 var DEFAULT_HIGHLIGHT_COLOR = '#ffff00';
 var DEFAULT_SELECTED_COLOR = '#ff9900';
 var DEFAULT_TEXT_COLOR = '#000000';
+var DEFAULT_CASE_INSENSITIVE = false;
 /*** CONSTANTS ***/
 
 /*** VARIABLES ***/
@@ -174,9 +175,13 @@ function search(regexString) {
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
       'selectedColor' : DEFAULT_SELECTED_COLOR,
       'textColor' : DEFAULT_TEXT_COLOR,
-      'maxResults' : DEFAULT_MAX_RESULTS}, 
+      'maxResults' : DEFAULT_MAX_RESULTS,
+      'caseInsensitive' : DEFAULT_CASE_INSENSITIVE}, 
       function(result) {
         initSearchInfo(regexString);
+        if(result.caseInsensitive){
+          regex = new RegExp(regexString, 'i');
+        }
         highlight(regex, result.highlightColor, result.selectedColor, result.textColor, result.maxResults);
         selectFirstNode(result.selectedColor);
         returnSearchInfo();

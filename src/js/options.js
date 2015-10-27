@@ -3,6 +3,7 @@ var DEFAULT_MAX_RESULTS = 500;
 var DEFAULT_HIGHLIGHT_COLOR = '#ffff00';
 var DEFAULT_SELECTED_COLOR = '#ff9900';
 var DEFAULT_TEXT_COLOR = '#000000';
+var DEFAULT_CASE_INSENSITIVE = false;
 var WHITE_COLOR = '#ffffff';
 var ERROR_COLOR = '#ff8989';
 var GOOD_COLOR = '#89ff89';
@@ -53,7 +54,8 @@ function saveOptions() {
       'selectedColor' : document.getElementById('selectedColor').value,
       'textColor' : document.getElementById('textColor').value,
       'maxResults' : maxResults,
-      'instantResults' :  document.getElementById('instantResults').checked
+      'instantResults' :  document.getElementById('instantResults').checked,
+      'caseInsensitive' : document.getElementById('caseInsensitive').checked
     }
     
     chrome.storage.local.set(options, function() {
@@ -69,7 +71,8 @@ function loadOptions() {
     'selectedColor' : DEFAULT_SELECTED_COLOR,
     'textColor' : DEFAULT_TEXT_COLOR,
     'maxResults' : DEFAULT_MAX_RESULTS,
-    'instantResults' : DEFAULT_INSTANT_RESULTS }, 
+    'instantResults' : DEFAULT_INSTANT_RESULTS,
+    'caseInsensitive' : DEFAULT_CASE_INSENSITIVE }, 
     function(result) {
       document.getElementById('highlightColor').value = result.highlightColor;
       document.getElementById('exampleHighlighted').style.backgroundColor = result.highlightColor;
@@ -80,6 +83,7 @@ function loadOptions() {
       document.getElementById('exampleSelected').style.color = result.textColor;
       document.getElementById('maxResults').value = result.maxResults;
       document.getElementById('instantResults').checked = result.instantResults;
+      document.getElementById('caseInsensitive').checked = result.caseInsensitive;
     }
   );
 }
@@ -118,6 +122,11 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   document.getElementById('instantResults').addEventListener('change', function() {
+    saveOptions();
+  });
+  
+  
+  document.getElementById('caseInsensitive').addEventListener('change', function() {
     saveOptions();
   });
   

@@ -59,16 +59,22 @@
             <p><input id="highlightColor" type="color" /> <label for="highlightColor">Highlight color</label></p>
             <p><input id="selectedColor" type="color" /> <label for="selectedColor">Selected color</label></p>
             <p><input id="textColor" type="color" /> <label for="colorText">Text color</label></p>
-            <br />
             <p class="example-chrome-regex">This is <span id = "exampleHighlighted"> highlighted</span> text.</p>
             <p class="example-chrome-regex">This is <span id = "exampleSelected"> selected</span> text.</p>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Should case insensitive search be enabled?</div>
+          <div class="panel-body">
+            <input id="caseInsensitive" type="checkbox" /> <label for="instantResults">Case insensitive search</label>
+            <br />
           </div>
         </div>
         <div class="panel panel-default">
           <div class="panel-heading">Should results be highlighted instantaneously as you type (like Google Instant)?</div>
           <div class="panel-body">
             <input id="instantResults" type="checkbox" /> <label for="instantResults">Instant highlighting</label>
-            <br /><br />
+            <br />
             <small>When this is disabled, you must press 'Enter' to trigger a search for regex matches.</small>
           </div>
         </div>
@@ -76,7 +82,7 @@
           <div class="panel-heading">What's the maximum number of regex matches that should be highlighted on the web page?</div>
           <div class="panel-body">
             <label for="maxResults">Max results</label> <input id="maxResults" type="text" name="maxResults" ></input>
-            <br /><br />
+            <br />
             <small>The smaller this number is, the better your performance (especially for complex pages).</small>
           </div>
         </div>
