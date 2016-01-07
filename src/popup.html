@@ -30,6 +30,9 @@
       #clear {
         -webkit-text-stroke: 1px rgba(0,0,0,1);
       }
+      #show-history {
+        -webkit-text-stroke: 0px;
+      }
       .flexContainer {
         position: relative;
         text-align: right;
@@ -53,6 +56,25 @@
         height: 1.6;
         font-size: 10pt;
       }
+      #history {
+        margin: 4px 2px;
+        display: none;
+      }
+      .historyDeleteEntry {
+        color: #c00;
+        cursor: pointer;
+        margin-right: 4px;
+        font-size: 0.8em;
+      }
+      .historyLink {
+        color: #09d;
+        cursor: pointer;
+      }
+      .historyIsEmptyMessage {
+        font-style: italic;
+        color: #555;
+      }
+
       body {
         background-color: #dddddd;
       }
@@ -67,6 +89,9 @@
       <a href="#" id="prev" type="button" title="Previous Match"><i class="fa fa-angle-up"></i></a>
       <a href="#" id="next" type="button" title="Next Match"><i class="fa fa-angle-down"></i></a>
       <a href="#" id="clear" type="button" title="clear"><i class="fa fa-trash-o"></i></a>
+      <a href="#" id="show-history" type="button"><i class="fa fa-history"></i></a>
+    </div>
+    <div id="history">
     </div>
     <span id="error" class="error-chrome-regex"></span>
   </body>
