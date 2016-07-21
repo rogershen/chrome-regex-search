@@ -60,21 +60,20 @@ function passInputToContentScript(){
     } else {
       document.getElementById('inputRegex').style.backgroundColor = WHITE_COLOR;
     }
-    chrome.tabs.query({
-      'active': true,
-      'currentWindow': true
-    },
-    function(tabs) {
-      if ('undefined' != typeof tabs[0].id && tabs[0].id) {
-        processingKey = true;
-        chrome.tabs.sendMessage(tabs[0].id, {
-          'message' : 'search',
-          'regexString' : regexString,
-          'getNext' : true
-        });
-        sentInput = true;
+    chrome.tabs.query(
+      { 'active': true, 'currentWindow': true },
+      function(tabs) {
+        if ('undefined' != typeof tabs[0].id && tabs[0].id) {
+          processingKey = true;
+          chrome.tabs.sendMessage(tabs[0].id, {
+            'message' : 'search',
+            'regexString' : regexString,
+            'getNext' : true
+          });
+          sentInput = true;
+        }
       }
-    });
+    );
   }
 }
 
@@ -96,7 +95,7 @@ document.getElementById('clear').addEventListener('click', function() {
 
 /* Received returnSearchInfo message, populate popup UI */ 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if ('returnSearchInfo' == request.message) {
+  if ('returnSearchInfo' == request.message) {
     processingKey = false;
     if (request.numResults > 0) {
       document.getElementById('numResults').textContent = String(request.currentSelection+1) + ' of ' + String(request.numResults);
@@ -109,7 +108,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.regexString !== document.getElementById('inputRegex').value) {
       passInputToContentScript();
     }
-	}
+  }
 });
 
 /* Key listener for selectNext and selectPrev
@@ -172,4 +171,9 @@ function(tabs) {
 
 /* Focus onto input form */
 document.getElementById('inputRegex').focus();
+window.setTimeout( 
+  function(){document.getElementById('inputRegex').select();}, 0);
+//Thanks to http://stackoverflow.com/questions/480735#comment40578284_14573552
+
 /*** INIT ***/
+

@@ -99,7 +99,7 @@ function restoreDefaults() {
 
 /*** LISTENERS ***/
 document.addEventListener('DOMContentLoaded', function() {
-	loadOptions();
+  loadOptions();
 
   document.getElementById('highlightColor').addEventListener('change', function() {
     document.getElementById('exampleHighlighted').style.backgroundColor = document.getElementById('highlightColor').value;
@@ -130,12 +130,12 @@ document.addEventListener('DOMContentLoaded', function() {
     saveOptions();
   });
   
-	document.getElementById('buttonSave').addEventListener('click', function() {
-		saveOptions();
-	});
+  document.getElementById('buttonSave').addEventListener('click', function() {
+    saveOptions();
+  });
   
-	document.getElementById('buttonReset').addEventListener('click', function() {
-		restoreDefaults();
-	});
+  document.getElementById('buttonReset').addEventListener('click', function() {
+    restoreDefaults();
+  });
 });
 /*** LISTENERS ***/
