@@ -9,19 +9,19 @@ var DEFAULT_MAX_RESULTS = 500;
 var DEFAULT_HIGHLIGHT_COLOR = '#ffff00';
 var DEFAULT_SELECTED_COLOR = '#ff9900';
 var DEFAULT_TEXT_COLOR = '#000000';
-var DEFAULT_CASE_INSENSITIVE = false;
 /*** CONSTANTS ***/
 
 /*** VARIABLES ***/
+// The current state of the search on this page.
 var searchInfo;
 /*** VARIABLES ***/
-                     
+
 /*** LIBRARY FUNCTIONS ***/
 Element.prototype.documentOffsetTop = function () {
   return this.offsetTop + ( this.offsetParent ? this.offsetParent.documentOffsetTop() : 0 );
 };
 Element.prototype.visible = function() {
-    return (!window.getComputedStyle(this) || window.getComputedStyle(this).getPropertyValue('display') == '' || 
+    return (!window.getComputedStyle(this) || window.getComputedStyle(this).getPropertyValue('display') == '' ||
            window.getComputedStyle(this).getPropertyValue('display') != 'none')
 }
 /*** LIBRARY FUNCTIONS ***/
@@ -32,7 +32,7 @@ Element.prototype.visible = function() {
 function initSearchInfo(pattern) {
   var pattern = typeof pattern !== 'undefined' ? pattern : '';
   searchInfo = {
-    regexString : pattern,
+    regexString : pattern,  //possibly including mode modifiers
     selectedIndex : 0,
     highlightedNodes : [],
     length : 0
@@ -43,7 +43,7 @@ function initSearchInfo(pattern) {
 function returnSearchInfo() {
   chrome.runtime.sendMessage({
     'message' : 'returnSearchInfo',
-    'regexString' : searchInfo.regexString,
+    'regexString' : searchInfo.regexString,   // may include mode modifiers
     'currentSelection' : searchInfo.selectedIndex,
     'numResults' : searchInfo.length
   });
@@ -56,7 +56,7 @@ function isTextNode(node) {
 
 /* Check if the given node is an expandable node that will yield text nodes */
 function isExpandable(node) {
-  return node && node.nodeType === ELEMENT_NODE_TYPE && node.childNodes && 
+  return node && node.nodeType === ELEMENT_NODE_TYPE && node.childNodes &&
          !UNEXPANDABLE.test(node.tagName) && node.visible();
 }
 
@@ -72,7 +72,7 @@ function highlight(regex, highlightColor, selectedColor, textColor, maxResults) 
         var matchedText = node.data.match(regex)[0];
         var matchedTextNode = node.splitText(index);
         matchedTextNode.splitText(matchedText.length);
-        var spanNode = document.createElement(HIGHLIGHT_TAG); 
+        var spanNode = document.createElement(HIGHLIGHT_TAG);
         spanNode.className = HIGHLIGHT_CLASS;
         spanNode.style.backgroundColor = highlightColor;
         spanNode.style.color = textColor;
@@ -106,7 +106,7 @@ function removeHighlight() {
 
 /* Scroll page to given element */
 function scrollToElement(element) {
-    element.scrollIntoView(); 
+    element.scrollIntoView();
     var top = element.documentOffsetTop() - ( window.innerHeight / 2 );
     window.scrollTo( 0, Math.max(top, window.pageYOffset - (window.innerHeight/2))) ;
 }
@@ -129,13 +129,13 @@ function selectNode(highlightedColor, selectedColor, getNext) {
     searchInfo.highlightedNodes[searchInfo.selectedIndex].style.backgroundColor = highlightedColor;
       if(getNext) {
         if(searchInfo.selectedIndex === length - 1) {
-          searchInfo.selectedIndex = 0; 
+          searchInfo.selectedIndex = 0;
         } else {
           searchInfo.selectedIndex += 1;
         }
       } else {
         if(searchInfo.selectedIndex === 0) {
-          searchInfo.selectedIndex = length - 1; 
+          searchInfo.selectedIndex = length - 1;
         } else {
           searchInfo.selectedIndex -= 1;
         }
@@ -148,7 +148,7 @@ function selectNode(highlightedColor, selectedColor, getNext) {
 }
 /* Forward cycle through regex matched elements */
 function selectNextNode(highlightedColor, selectedColor) {
-  selectNode(highlightedColor, selectedColor, true); 
+  selectNode(highlightedColor, selectedColor, true);
 }
 
 /* Backward cycle through regex matched elements */
@@ -156,41 +156,45 @@ function selectPrevNode(highlightedColor, selectedColor) {
   selectNode(highlightedColor, selectedColor, false);
 }
 
-/* Validate that a given pattern string is a valid regex */
-function validateRegex(pattern) {
+/* Validate that a given pattern string is a valid regex.
+   Returns the compiled regex if so, or false if not. */
+function compileRegexIfValid(pattern, isCaseInsensitive) {
   try{
-    var regex = new RegExp(pattern);
+    var regex = new RegExp(pattern, isCaseInsensitive ? 'i' : '');
     return regex;
   } catch(e) {
     return false;
   }
 }
 
-/* Find and highlight regex matches in web page from a given regex string or pattern */
+/* Find and highlight regex matches in web page from a given regex string.
+   If a string, it may include mode modifiers.
+   TODO? also support patterns as args. */
 function search(regexString) {
-  var regex = validateRegex(regexString);
-  if (regex && regexString != '' && regexString !== searchInfo.regexString) { // new valid regex string
+  var regexinfo = splitRegexString(regexString);  //chop mode modifiers
+  var regex = compileRegexIfValid(regexinfo.str, "i" in regexinfo);
+
+  if (regex && regexinfo.str != '' && regexString !== searchInfo.regexString) {
+    // new valid regex string
     removeHighlight();
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
       'selectedColor' : DEFAULT_SELECTED_COLOR,
       'textColor' : DEFAULT_TEXT_COLOR,
-      'maxResults' : DEFAULT_MAX_RESULTS,
-      'caseInsensitive' : DEFAULT_CASE_INSENSITIVE}, 
+      'maxResults' : DEFAULT_MAX_RESULTS},
       function(result) {
         initSearchInfo(regexString);
-        if(result.caseInsensitive){
-          regex = new RegExp(regexString, 'i');
-        }
         highlight(regex, result.highlightColor, result.selectedColor, result.textColor, result.maxResults);
         selectFirstNode(result.selectedColor);
         returnSearchInfo();
       }
     );
-  } else if (regex && regexString != '' && regexString === searchInfo.regexString) { // elements are already highlighted
+  } else if (regex && regexinfo.str != '' &&
+              regexString === searchInfo.regexString) {
+    // elements are already highlighted
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
-      'selectedColor' : DEFAULT_SELECTED_COLOR}, 
+      'selectedColor' : DEFAULT_SELECTED_COLOR},
       function(result) {
         selectNextNode(result.highlightColor, result.selectedColor);
       }
@@ -206,45 +210,45 @@ function search(regexString) {
 /*** LISTENERS ***/
 /* Received search message, find regex matches */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if ('search' == request.message) {
-    search(request.regexString);
-	}
+  if ('search' == request.message) {
+    search(request.regexString);  // which may include mode modifiers
+  }
 });
 
 /* Received selectNextNode message, select next regex match */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if ('selectNextNode' == request.message) {
+  if ('selectNextNode' == request.message) {
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
       'selectedColor' : DEFAULT_SELECTED_COLOR
-      }, 
+      },
       function(result) {
         selectNextNode(result.highlightColor, result.selectedColor);
       }
     );
-	}
+  }
 });
 
 /* Received selectPrevNode message, select previous regex match */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if ('selectPrevNode' == request.message) {
+  if ('selectPrevNode' == request.message) {
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
       'selectedColor' : DEFAULT_SELECTED_COLOR
-      }, 
+      },
       function(result) {
         selectPrevNode(result.highlightColor, result.selectedColor);
       }
     );
-	}
+  }
 });
 
 /* Received getSearchInfo message, return search information for this tab */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if ('getSearchInfo' == request.message) {
+  if ('getSearchInfo' == request.message) {
     sendResponse({message: "I'm alive!"});
     returnSearchInfo();
-	}
+  }
 });
 /*** LISTENERS ***/
 

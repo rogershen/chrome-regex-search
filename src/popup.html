@@ -59,16 +59,26 @@
       .error-chrome-regex {
         color: #FF0000;
       }
+      .flexColumn {
+        display: flex;
+        flex-direction: column;
+      }
     </style>
   </head>
   <body>
-    <div class="flexContainer">
-      <input id="inputRegex" type="text" name="inputRegex"></input><span id="numResults"></span>
-      <a href="#" id="prev" type="button" title="Previous Match"><i class="fa fa-angle-up"></i></a>
-      <a href="#" id="next" type="button" title="Next Match"><i class="fa fa-angle-down"></i></a>
-      <a href="#" id="clear" type="button" title="clear"><i class="fa fa-trash-o"></i></a>
+    <div class="flexColumn">
+      <div class="flexContainer" id="divPatternAndControls">
+        <input id="inputRegex" type="text" name="inputRegex" accesskey="t"></input><span id="numResults"></span><!--accesskey: Text-->
+        <a href="#" id="prev" type="button" title="Previous Match" accesskey="p"><i class="fa fa-angle-up"></i></a>
+        <a href="#" id="next" type="button" title="Next Match" accesskey="n"><i class="fa fa-angle-down"></i></a>
+        <a href="#" id="clear" type="button" title="clear" accesskey="r"><i class="fa fa-trash-o"></i></a><!--Reset-->
+      </div>
+      <div class="flexContainer" id="divCaseInsensitive">
+        <form><input type="checkbox" id="cbCaseInsensitive" accesskey="c">Case-insensitive search</input></form>
+      </div>
+      <span id="error" class="error-chrome-regex"></span>
     </div>
-    <span id="error" class="error-chrome-regex"></span>
   </body>
+  <script type="text/javascript" src="js/common.js"></script>
   <script type="text/javascript" src="js/popup.js"></script>
 </html>
