@@ -65,21 +65,20 @@ function passInputToContentScript(){
     } else {
       document.getElementById('inputRegex').style.backgroundColor = WHITE_COLOR;
     }
-    chrome.tabs.query({
-      'active': true,
-      'currentWindow': true
-    },
-    function(tabs) {
-      if ('undefined' != typeof tabs[0].id && tabs[0].id) {
-        processingKey = true;
-        chrome.tabs.sendMessage(tabs[0].id, {
-          'message' : 'search',
-          'regexString' : regexString,
-          'getNext' : true
-        });
-        sentInput = true;
+    chrome.tabs.query(
+      { 'active': true, 'currentWindow': true },
+      function(tabs) {
+        if ('undefined' != typeof tabs[0].id && tabs[0].id) {
+          processingKey = true;
+          chrome.tabs.sendMessage(tabs[0].id, {
+            'message' : 'search',
+            'regexString' : regexString,
+            'getNext' : true
+          });
+          sentInput = true;
+        }
       }
-    });
+    );
   }
 }
 
@@ -263,4 +262,9 @@ function(tabs) {
 
 /* Focus onto input form */
 document.getElementById('inputRegex').focus();
+window.setTimeout( 
+  function(){document.getElementById('inputRegex').select();}, 0);
+//Thanks to http://stackoverflow.com/questions/480735#comment40578284_14573552
+
 /*** INIT ***/
+
