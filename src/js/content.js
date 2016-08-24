@@ -207,14 +207,14 @@ function search(regexString) {
 /*** LISTENERS ***/
 /* Received search message, find regex matches */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if ('search' == request.message) {
+  if ('search' == request.message) {
     search(request.regexString);
-	}
+  }
 });
 
 /* Received selectNextNode message, select next regex match */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if ('selectNextNode' == request.message) {
+  if ('selectNextNode' == request.message) {
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
       'selectedColor' : DEFAULT_SELECTED_COLOR
@@ -223,12 +223,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         selectNextNode(result.highlightColor, result.selectedColor);
       }
     );
-	}
+  }
 });
 
 /* Received selectPrevNode message, select previous regex match */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if ('selectPrevNode' == request.message) {
+  if ('selectPrevNode' == request.message) {
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
       'selectedColor' : DEFAULT_SELECTED_COLOR
@@ -237,15 +237,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         selectPrevNode(result.highlightColor, result.selectedColor);
       }
     );
-	}
+  }
 });
 
 /* Received getSearchInfo message, return search information for this tab */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if ('getSearchInfo' == request.message) {
+  if ('getSearchInfo' == request.message) {
     sendResponse({message: "I'm alive!"});
     returnSearchInfo('getSearchInfo');
-	}
+  }
 });
 /*** LISTENERS ***/
 
