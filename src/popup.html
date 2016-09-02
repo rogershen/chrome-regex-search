@@ -48,7 +48,7 @@
       #numResults {
         position: absolute;
         top: 0.25em;
-        left: 19.5em;
+        left: 15.5em;
         min-width: 4em;
         max-width: 5em;
         overflow:auto;
@@ -74,6 +74,15 @@
         font-style: italic;
         color: #555;
       }
+      
+      .clearHistoryButton {
+        color: #000; 
+        text-decoration: none;
+        float: left !important;
+        width: 7em !important;
+        -webkit-text-stroke: 0.5px rgba(0,0,0,1) !important;
+        margin-bottom: 0.2em;
+      }
 
       body {
         background-color: #dddddd;
@@ -88,8 +97,8 @@
       <input id="inputRegex" type="text" name="inputRegex"></input><span id="numResults"></span>
       <a href="#" id="prev" type="button" title="Previous Match"><i class="fa fa-angle-up"></i></a>
       <a href="#" id="next" type="button" title="Next Match"><i class="fa fa-angle-down"></i></a>
-      <a href="#" id="clear" type="button" title="clear"><i class="fa fa-trash-o"></i></a>
-      <a href="#" id="show-history" type="button"><i class="fa fa-history"></i></a>
+      <a href="#" id="clear" type="button" title="Clear"><i class="fa fa-trash-o"></i></a>
+      <a href="#" id="show-history" type="button" title="History"><i class="fa fa-history"></i></a>
     </div>
     <div id="history">
     </div>

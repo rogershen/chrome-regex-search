@@ -6,6 +6,7 @@ var ERROR_TEXT = "Content script was not loaded. Are you currently in the Chrome
 var SHOW_HISTORY_TITLE = "Show search history";
 var HIDE_HISTORY_TITLE = "Hide search history";
 var HISTORY_IS_EMPTY_TEXT = "Search history is empty.";
+var CLEAR_ALL_HISTORY_TEXT = "Clear History";
 var MAX_HISTORY_LENGTH = 30;
 /*** CONSTANTS ***/
 
@@ -13,6 +14,7 @@ var MAX_HISTORY_LENGTH = 30;
 var sentInput = false;
 var processingKey = false;
 var searchHistory = null;
+var maxHistoryLength = MAX_HISTORY_LENGTH;
 /*** VARIABLES ***/
 
 /*** FUNCTIONS ***/
@@ -102,6 +104,7 @@ function createHistoryLineElement(text) {
     if (document.getElementById('inputRegex').value !== text) {
       document.getElementById('inputRegex').value = text;
       passInputToContentScript();
+      document.getElementById('inputRegex').focus();
     }
   });
   var lineDiv = document.createElement('div');
@@ -123,6 +126,13 @@ function updateHistoryDiv() {
       for (var i = searchHistory.length - 1; i >= 0; i--) {
         historyDiv.appendChild(createHistoryLineElement(searchHistory[i]));
       }
+      var clearButton = document.createElement('a');
+      clearButton.href = '#';
+      clearButton.type = 'button';
+      clearButton.textContent = CLEAR_ALL_HISTORY_TEXT;
+      clearButton.className = 'clearHistoryButton';
+      clearButton.addEventListener('click', clearSearchHistory);
+      historyDiv.appendChild(clearButton);
     }
   }
 }
@@ -137,8 +147,8 @@ function addToHistory(regex) {
         searchHistory.splice(i, 1);
       }
     }
-    if (searchHistory.length > MAX_HISTORY_LENGTH) {
-      searchHistory.splice(0, searchHistory.length - MAX_HISTORY_LENGTH);
+    if (searchHistory.length > maxHistoryLength) {
+      searchHistory.splice(0, searchHistory.length - maxHistoryLength);
     }
     chrome.storage.local.set({searchHistory: searchHistory});
     updateHistoryDiv();
@@ -149,6 +159,13 @@ function setHistoryVisibility(makeVisible) {
   document.getElementById('history').style.display = makeVisible ? 'block' : 'none';
   document.getElementById('show-history').title = makeVisible ? HIDE_HISTORY_TITLE : SHOW_HISTORY_TITLE;
 }
+
+function clearSearchHistory() {
+  searchHistory = [];
+  chrome.storage.local.set({searchHistory: searchHistory});
+  updateHistoryDiv();
+}
+
 
 /*** LISTENERS ***/
 document.getElementById('next').addEventListener('click', function() {
@@ -217,6 +234,7 @@ onkeydown = onkeyup = function(e) {
 /* Retrieve from storage whether we should use instant results or not */
 chrome.storage.local.get({
     'instantResults' : DEFAULT_INSTANT_RESULTS,
+    'maxHistoryLength' : MAX_HISTORY_LENGTH,
     'searchHistory' : null,
     'isSearchHistoryVisible' : false},
   function(result) {
@@ -228,6 +246,10 @@ chrome.storage.local.get({
       document.getElementById('inputRegex').addEventListener('change', function() {
         passInputToContentScript();
       });
+    }
+    console.log(result);
+    if(result.maxHistoryLength) {
+      maxHistoryLength = result.maxHistoryLength;
     }
     if(result.searchHistory) {
       searchHistory = result.searchHistory.slice(0);
