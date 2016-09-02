@@ -9,7 +9,9 @@ An extension for Regex Search in lieu of Chrome's CTRL+F.
 Instead of writing a program to download a web page to find regex matches, use 
 this simple extension to highlight regex matches on the web page dynamically as you type.
 
-Offers customizable highlighting and instantaneous search in the extension options.
+Offers customizable highlighting, case-insensitive and instantaneous search in the extension options.
+
+Also, offers a search history that can be configured to the max number of records.
 
 Note that textarea and input elements will not be highlighted as they cannot be styled by CSS3 natively.
 

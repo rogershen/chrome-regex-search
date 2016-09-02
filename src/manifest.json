@@ -3,7 +3,7 @@
 
   "name": "Chrome Regex Search",
   "description": "An extension for Regex Search in lieu of Chrome's CTRL+F",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "icons": {
     "16": "icons/icons_16.png",
     "24": "icons/icons_24.png",
