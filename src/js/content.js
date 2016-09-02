@@ -40,12 +40,13 @@ function initSearchInfo(pattern) {
 }
 
 /* Send message with search information for this tab */
-function returnSearchInfo() {
+function returnSearchInfo(cause) {
   chrome.runtime.sendMessage({
     'message' : 'returnSearchInfo',
     'regexString' : searchInfo.regexString,
     'currentSelection' : searchInfo.selectedIndex,
-    'numResults' : searchInfo.length
+    'numResults' : searchInfo.length,
+    'cause' : cause
   });
 }
 
@@ -142,7 +143,7 @@ function selectNode(highlightedColor, selectedColor, getNext) {
       }
     searchInfo.highlightedNodes[searchInfo.selectedIndex].className = SELECTED_CLASS;
     searchInfo.highlightedNodes[searchInfo.selectedIndex].style.backgroundColor = selectedColor;
-    returnSearchInfo();
+    returnSearchInfo('selectNode');
     scrollToElement(searchInfo.highlightedNodes[searchInfo.selectedIndex]);
   }
 }
@@ -184,7 +185,7 @@ function search(regexString) {
         }
         highlight(regex, result.highlightColor, result.selectedColor, result.textColor, result.maxResults);
         selectFirstNode(result.selectedColor);
-        returnSearchInfo();
+        returnSearchInfo('search');
       }
     );
   } else if (regex && regexString != '' && regexString === searchInfo.regexString) { // elements are already highlighted
@@ -198,7 +199,7 @@ function search(regexString) {
   } else { // blank string or invalid regex
     removeHighlight();
     initSearchInfo(regexString);
-    returnSearchInfo();
+    returnSearchInfo('search');
   }
 }
 /*** FUNCTIONS ***/
@@ -243,7 +244,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if ('getSearchInfo' == request.message) {
     sendResponse({message: "I'm alive!"});
-    returnSearchInfo();
+    returnSearchInfo('getSearchInfo');
   }
 });
 /*** LISTENERS ***/
