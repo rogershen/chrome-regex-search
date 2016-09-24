@@ -5,8 +5,11 @@ var WHITE_COLOR = '#ffffff';
 var ERROR_TEXT = "Content script was not loaded. Are you currently in the Chrome Web Store or in a chrome:// page? If you are, content scripts won't work here. If not, please wait for the page to finish loading or refresh the page.";
 var SHOW_HISTORY_TITLE = "Show search history";
 var HIDE_HISTORY_TITLE = "Hide search history";
+var ENABLE_CASE_INSENSITIVE_TITLE = "Enable case insensitive search";
+var DISABLE_CASE_INSENSITIVE_TITLE = "Disable case insensitive search";
 var HISTORY_IS_EMPTY_TEXT = "Search history is empty.";
 var CLEAR_ALL_HISTORY_TEXT = "Clear History";
+var DEFAULT_CASE_INSENSITIVE = false;
 var MAX_HISTORY_LENGTH = 30;
 /*** CONSTANTS ***/
 
@@ -60,6 +63,10 @@ function selectPrev(){
 
 /* Send message to pass input string to content script of tab to find and highlight regex matches */
 function passInputToContentScript(){
+  passInputToContentScript(false);
+}
+
+function passInputToContentScript(configurationChanged){
   if (!processingKey) {
     var regexString = document.getElementById('inputRegex').value;
     if  (!isValidRegex(regexString)) {
@@ -75,6 +82,7 @@ function passInputToContentScript(){
           chrome.tabs.sendMessage(tabs[0].id, {
             'message' : 'search',
             'regexString' : regexString,
+            'configurationChanged' : configurationChanged,
             'getNext' : true
           });
           sentInput = true;
@@ -158,6 +166,36 @@ function addToHistory(regex) {
 function setHistoryVisibility(makeVisible) {
   document.getElementById('history').style.display = makeVisible ? 'block' : 'none';
   document.getElementById('show-history').title = makeVisible ? HIDE_HISTORY_TITLE : SHOW_HISTORY_TITLE;
+  if(makeVisible) {
+    document.getElementById('show-history').className = 'selected';
+  } else {
+    document.getElementById('show-history').className = '';
+  }
+}
+
+function setCaseInsensitiveElement() {
+  var caseInsensitive = chrome.storage.local.get({'caseInsensitive':DEFAULT_CASE_INSENSITIVE},
+  function (result) {
+    document.getElementById('insensitive').title = result.caseInsensitive ? DISABLE_CASE_INSENSITIVE_TITLE : ENABLE_CASE_INSENSITIVE_TITLE;
+    if(result.caseInsensitive) {
+      document.getElementById('insensitive').className = 'selected';
+    } else {
+      document.getElementById('insensitive').className = '';
+    }
+  });
+
+}
+function toggleCaseInsensitive() {
+  var caseInsensitive = document.getElementById('insensitive').className == 'selected';
+  document.getElementById('insensitive').title = caseInsensitive ? ENABLE_CASE_INSENSITIVE_TITLE : DISABLE_CASE_INSENSITIVE_TITLE;
+  if(caseInsensitive) {
+    document.getElementById('insensitive').className = '';
+  } else {
+    document.getElementById('insensitive').className = 'selected';
+  }
+  sentInput = false;
+  chrome.storage.local.set({caseInsensitive: !caseInsensitive});
+  passInputToContentScript(true);
 }
 
 function clearSearchHistory() {
@@ -187,6 +225,10 @@ document.getElementById('show-history').addEventListener('click', function() {
   var makeVisible = document.getElementById('history').style.display == 'none';
   setHistoryVisibility(makeVisible);
   chrome.storage.local.set({isSearchHistoryVisible: makeVisible});
+});
+
+document.getElementById('insensitive').addEventListener('click', function() {
+  toggleCaseInsensitive();
 });
 
 /* Received returnSearchInfo message, populate popup UI */ 
@@ -288,5 +330,10 @@ window.setTimeout(
   function(){document.getElementById('inputRegex').select();}, 0);
 //Thanks to http://stackoverflow.com/questions/480735#comment40578284_14573552
 
+var makeVisible = document.getElementById('history').style.display == 'none';
+setHistoryVisibility(makeVisible);
+chrome.storage.local.set({isSearchHistoryVisible: makeVisible});
+
+setCaseInsensitiveElement();
 /*** INIT ***/
 

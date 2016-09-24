@@ -168,9 +168,9 @@ function validateRegex(pattern) {
 }
 
 /* Find and highlight regex matches in web page from a given regex string or pattern */
-function search(regexString) {
+function search(regexString, configurationChanged) {
   var regex = validateRegex(regexString);
-  if (regex && regexString != '' && regexString !== searchInfo.regexString) { // new valid regex string
+  if (regex && regexString != '' && (configurationChanged || regexString !== searchInfo.regexString)) { // new valid regex string
     removeHighlight();
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
@@ -208,7 +208,7 @@ function search(regexString) {
 /* Received search message, find regex matches */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if ('search' == request.message) {
-    search(request.regexString);
+    search(request.regexString, request.configurationChanged);
   }
 });
 

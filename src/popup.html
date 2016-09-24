@@ -21,11 +21,20 @@
         border-radius: 2px;
         -webkit-text-stroke: 2px rgba(0,0,0,1);
       }
+      a.selected {
+        background-color: #eaeaea;
+        color: #000;
+        -webkit-box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
+               box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
+      }
       a:hover {
         background-color: #dadada;
         color: #000;
        -webkit-box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
                box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
+      }
+      #insensitive {
+        -webkit-text-stroke: 1px rgba(0,0,0,1);
       }
       #clear {
         -webkit-text-stroke: 1px rgba(0,0,0,1);
@@ -39,7 +48,7 @@
         display: flex;
       }
       #inputRegex {
-        width: 19em;
+        width: 22em;
         border-radius: 2px;
         padding-right: 5em;
        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .125);
@@ -48,7 +57,7 @@
       #numResults {
         position: absolute;
         top: 0.25em;
-        right: 10em;
+        right: 12em;
         min-width: 4em;
         max-width: 5em;
         overflow:auto;
@@ -97,8 +106,9 @@
       <input id="inputRegex" type="text" name="inputRegex"></input><span id="numResults"></span>
       <a href="#" id="prev" type="button" title="Previous Match"><i class="fa fa-angle-up"></i></a>
       <a href="#" id="next" type="button" title="Next Match"><i class="fa fa-angle-down"></i></a>
+      <a href="#" id="insensitive" type="button" title="Case Insensitive"><i class="fa fa-info"></i></a>
       <a href="#" id="clear" type="button" title="Clear"><i class="fa fa-trash-o"></i></a>
-      <a href="#" id="show-history" type="button" title="History"><i class="fa fa-history"></i></a>
+      <a href="#" class="selected" id="show-history" type="button" title="History"><i class="fa fa-history"></i></a>
     </div>
     <div id="history">
     </div>
