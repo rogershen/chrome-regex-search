@@ -4,7 +4,7 @@
 
 An extension for Regex Search in lieu of Chrome's CTRL+F.
 
-<img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/regex.png" />
+<img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/popup.png" />
 <br />
 Instead of writing a program to download a web page to find regex matches, use 
 this simple extension to highlight regex matches on the web page dynamically as you type.
