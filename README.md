@@ -23,14 +23,6 @@ Click 'Add to Chrome'
 ## Screenshots
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/googlenews.png" />
 Four letter words
-<img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/googleflights.png" />
-Flights that cost two digits
-<img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/imdb.png" />
-Movies with higher than a 8 rating.
-<img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/reddit.png" />
-Posts with more than a hundred upvotes
-<img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/youtubesearch.png" />
-Videos with more than one million views
 <img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/settings.png" />
 Customizable settings
 
