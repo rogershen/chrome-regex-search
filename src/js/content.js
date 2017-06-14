@@ -3,8 +3,8 @@ var ELEMENT_NODE_TYPE = 1;
 var TEXT_NODE_TYPE = 3;
 var UNEXPANDABLE = /(script|style|svg|audio|canvas|figure|video|select|input|textarea)/i;
 var HIGHLIGHT_TAG = 'highlight-tag';
-var HIGHLIGHT_CLASS = 'chrome-regex-search-highlighted';
-var SELECTED_CLASS = 'chrome-regex-search-selected';
+var HIGHLIGHT_CLASS = 'highlighted';
+var SELECTED_CLASS = 'selected';
 var DEFAULT_MAX_RESULTS = 500;
 var DEFAULT_HIGHLIGHT_COLOR = '#ffff00';
 var DEFAULT_SELECTED_COLOR = '#ff9900';
@@ -14,7 +14,6 @@ var DEFAULT_CASE_INSENSITIVE = false;
 
 /*** VARIABLES ***/
 var searchInfo;
-var finder;
 /*** VARIABLES ***/
                      
 /*** LIBRARY FUNCTIONS ***/
@@ -35,7 +34,7 @@ function initSearchInfo(pattern) {
   searchInfo = {
     regexString : pattern,
     selectedIndex : 0,
-    highlights : [],
+    highlightedNodes : [],
     length : 0
   }
 }
@@ -51,30 +50,58 @@ function returnSearchInfo(cause) {
   });
 }
 
+/* Check if the given node is a text node */
+function isTextNode(node) {
+  return node && node.nodeType === TEXT_NODE_TYPE;
+}
+
+/* Check if the given node is an expandable node that will yield text nodes */
+function isExpandable(node) {
+  return node && node.nodeType === ELEMENT_NODE_TYPE && node.childNodes && 
+         !UNEXPANDABLE.test(node.tagName) && node.visible();
+}
+
 /* Highlight all text that matches regex */
 function highlight(regex, highlightColor, selectedColor, textColor, maxResults) {
-  finder = findAndReplaceDOMText(
-    document.body,
-    {
-      find: regex,
-      wrap: "span",
-      wrapClass: HIGHLIGHT_CLASS,
-      filterElements: function(element) {
-        /* Check if the element is visible */
-        /* https://stackoverflow.com/a/21696585 */
-        return element.offsetParent !== null || element === document.body;
-      },
-      preset: "prose"
+  function highlightRecursive(node) {
+    if(searchInfo.length >= maxResults){
+      return;
     }
-  )
-  searchInfo.highlights = finder.elements;
-  searchInfo.length = finder.elements.length;
+    if (isTextNode(node)) {
+      var index = node.data.search(regex);
+      if (index >= 0 && node.data.length > 0) {
+        var matchedText = node.data.match(regex)[0];
+        var matchedTextNode = node.splitText(index);
+        matchedTextNode.splitText(matchedText.length);
+        var spanNode = document.createElement(HIGHLIGHT_TAG); 
+        spanNode.className = HIGHLIGHT_CLASS;
+        spanNode.style.backgroundColor = highlightColor;
+        spanNode.style.color = textColor;
+        spanNode.appendChild(matchedTextNode.cloneNode(true));
+        matchedTextNode.parentNode.replaceChild(spanNode, matchedTextNode);
+        searchInfo.highlightedNodes.push(spanNode);
+        searchInfo.length += 1;
+        return 1;
+      }
+    } else if (isExpandable(node)) {
+        var children = node.childNodes;
+        for (var i = 0; i < children.length; ++i) {
+          var child = children[i];
+          i += highlightRecursive(child);
+        }
+    }
+    return 0;
+  }
+  highlightRecursive(document.getElementsByTagName('body')[0]);
 };
 
 /* Remove all highlights from page */
 function removeHighlight() {
-  if (finder) {
-    finder.revert();
+  while (node = document.body.querySelector(HIGHLIGHT_TAG + '.' + HIGHLIGHT_CLASS)) {
+    node.outerHTML = node.innerHTML;
+  }
+    while (node = document.body.querySelector(HIGHLIGHT_TAG + '.' + SELECTED_CLASS)) {
+    node.outerHTML = node.innerHTML;
   }
 };
 
@@ -85,41 +112,22 @@ function scrollToElement(element) {
     window.scrollTo( 0, Math.max(top, window.pageYOffset - (window.innerHeight/2))) ;
 }
 
-/* Select first regex match after selection on page */
+/* Select first regex match on page */
 function selectFirstNode(selectedColor) {
-  if (searchInfo.highlights.length === 0) {
-    return;
+  var length =  searchInfo.length;
+  if(length > 0) {
+    searchInfo.highlightedNodes[0].className = SELECTED_CLASS;
+    searchInfo.highlightedNodes[0].style.backgroundColor = selectedColor;
+    scrollToElement(searchInfo.highlightedNodes[0]);
   }
-
-  function selectIndex(index) {
-    searchInfo.selectedIndex = index;
-    searchInfo.highlights[index].forEach((e) => { e.className = SELECTED_CLASS; });
-    scrollToElement(searchInfo.highlights[index][0]);
-  }
-
-  if (getSelection().anchorNode) {
-    function path(e) {
-      return e.parentNode === null ? [] : path(e.parentNode).concat([Array.prototype.indexOf.call(e.parentNode.childNodes, e)]);
-    }
-
-    var selection = path(getSelection().anchorNode)
-    var index = searchInfo.highlights.findIndex((h) => path(h[0]) > selection);
-    if (index !== -1) {
-      selectIndex(index);
-      return;
-    }
-  }
-
-  selectIndex(0);
 }
 
 /* Helper for selecting a regex matched element */
 function selectNode(highlightedColor, selectedColor, getNext) {
   var length = searchInfo.length;
   if(length > 0) {
-    searchInfo.highlights[searchInfo.selectedIndex].forEach(function(n) {
-      n.className = HIGHLIGHT_CLASS;
-    });
+    searchInfo.highlightedNodes[searchInfo.selectedIndex].className = HIGHLIGHT_CLASS;
+    searchInfo.highlightedNodes[searchInfo.selectedIndex].style.backgroundColor = highlightedColor;
       if(getNext) {
         if(searchInfo.selectedIndex === length - 1) {
           searchInfo.selectedIndex = 0; 
@@ -133,11 +141,10 @@ function selectNode(highlightedColor, selectedColor, getNext) {
           searchInfo.selectedIndex -= 1;
         }
       }
-    searchInfo.highlights[searchInfo.selectedIndex].forEach(function(n) {
-      n.className = SELECTED_CLASS;
-    });
+    searchInfo.highlightedNodes[searchInfo.selectedIndex].className = SELECTED_CLASS;
+    searchInfo.highlightedNodes[searchInfo.selectedIndex].style.backgroundColor = selectedColor;
     returnSearchInfo('selectNode');
-    scrollToElement(searchInfo.highlights[searchInfo.selectedIndex][0]);
+    scrollToElement(searchInfo.highlightedNodes[searchInfo.selectedIndex]);
   }
 }
 /* Forward cycle through regex matched elements */
@@ -174,7 +181,7 @@ function search(regexString, configurationChanged) {
       function(result) {
         initSearchInfo(regexString);
         if(result.caseInsensitive){
-          regex = new RegExp(regexString, 'gi');
+          regex = new RegExp(regexString, 'i');
         }
         highlight(regex, result.highlightColor, result.selectedColor, result.textColor, result.maxResults);
         selectFirstNode(result.selectedColor);
@@ -245,17 +252,4 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 /*** INIT ***/
 initSearchInfo();
-
-chrome.storage.local.get({
-  'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
-  'selectedColor' : DEFAULT_SELECTED_COLOR,
-  'textColor' : DEFAULT_TEXT_COLOR,
-}, function(result) {
-  var css = document.createElement("style");
-  css.type = "text/css";
-  css.innerHTML =
-  "." + HIGHLIGHT_CLASS + " { background: " + result.highlightColor + "; color: " + result.textColor + " }\n" +
-  "." + SELECTED_CLASS + " { background: " + result.selectedColor + "; color: " + result.textColor + " }";
-  document.body.appendChild(css);
-});
 /*** INIT ***/

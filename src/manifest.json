@@ -39,8 +39,8 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "file://*/*"],
-      "js": ["js/content.js", "js/findAndReplaceDOMText.js"]
+      "matches": [ "http://*/*", "https://*/*", "file://*/*" ],
+      "js": [ "js/content.js" ]
     }
   ],
   "commands": {
