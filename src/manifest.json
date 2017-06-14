@@ -43,5 +43,15 @@
       "js": ["js/content.js", "js/findAndReplaceDOMText.js"]
     }
   ],
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "windows": "Ctrl+Shift+F",
+        "mac": "Command+Shift+F",
+        "chromeos": "Ctrl+Shift+F",
+        "linux": "Ctrl+Shift+F"
+      }
+    }
+  },
   "options_page": "options.html"
 }
