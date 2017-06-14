@@ -243,10 +243,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 /* Received getSearchInfo message, return search information for this tab */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if ('getSearchInfo' == request.message) {
-    sendResponse({
-      message: "I'm alive!",
-      selectedText: window.getSelection().toString()
-    });
+    sendResponse({message: "I'm alive!"});
     returnSearchInfo('getSearchInfo');
   }
 });
