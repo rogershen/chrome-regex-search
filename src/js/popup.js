@@ -267,6 +267,9 @@ onkeydown = onkeyup = function(e) {
         }
       } else if (map[16] && map[13]) { //SHIFT + ENTER
         selectPrev();
+      } else if (map[27]) { //ESCAPE
+        document.getElementById('inputRegex').value = "";
+        passInputToContentScript();
       }
     }
 }
