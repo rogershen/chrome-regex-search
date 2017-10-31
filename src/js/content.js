@@ -118,6 +118,12 @@ function selectFirstNode(selectedColor) {
   if(length > 0) {
     searchInfo.highlightedNodes[0].className = SELECTED_CLASS;
     searchInfo.highlightedNodes[0].style.backgroundColor = selectedColor;
+    parentNode = searchInfo.highlightedNodes[0].parentNode;
+    if (parentNode.nodeType === 1) {
+      parentNode.focus();
+    } else if (parentNode.parentNode.nodeType == 1) {
+      parentNode.parentNode.focus();
+    }
     scrollToElement(searchInfo.highlightedNodes[0]);
   }
 }
@@ -143,6 +149,12 @@ function selectNode(highlightedColor, selectedColor, getNext) {
       }
     searchInfo.highlightedNodes[searchInfo.selectedIndex].className = SELECTED_CLASS;
     searchInfo.highlightedNodes[searchInfo.selectedIndex].style.backgroundColor = selectedColor;
+    parentNode = searchInfo.highlightedNodes[searchInfo.selectedIndex].parentNode;
+    if (parentNode.nodeType === 1) {
+      parentNode.focus();
+    } else if (parentNode.parentNode.nodeType == 1) {
+      parentNode.parentNode.focus();
+    }
     returnSearchInfo('selectNode');
     scrollToElement(searchInfo.highlightedNodes[searchInfo.selectedIndex]);
   }
