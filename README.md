@@ -33,7 +33,7 @@ Customizable settings
 
 <b>Instructions to set up a keyboard shortcut to open the popup:</b>
 <br />
-In your browser, go to chrome://extensions/
+In your browser, go to chrome://extensions/configureCommands the setting options below have dissappeared in recent versions of Chrome.
 <br />
 Scroll down to the bottom
 <br />
