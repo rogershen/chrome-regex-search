@@ -240,6 +240,23 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   }
 });
 
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if ('copyToClipboard' == request.message) {
+    var clipboardHelper = document.createElement('textarea');
+    try {
+      var text = searchInfo.highlightedNodes.map(function (n) {
+        return n.innerText;
+      }).join('\n');
+      clipboardHelper.appendChild(document.createTextNode(text));
+      document.body.appendChild(clipboardHelper);
+      clipboardHelper.select();
+      document.execCommand('copy');
+    } finally {
+      document.body.removeChild(clipboardHelper);
+    }
+  }
+});
+
 /* Received getSearchInfo message, return search information for this tab */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if ('getSearchInfo' == request.message) {
