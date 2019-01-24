@@ -33,17 +33,13 @@ Customizable settings
 
 <b>Instructions to set up a keyboard shortcut to open the popup:</b>
 <br />
-In your browser, go to chrome://extensions/
+In your browser, go to chrome://extensions/shortcuts
 <br />
-Scroll down to the bottom
+Scroll to Chrome Regex Search
 <br />
 Click 'Keyboard Shortcuts'
-<img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/setupkeyboardshortcuts1.png" />
-Find this extension and click the box corresponding to 'Activate this extension'
-<img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/setupkeyboardshortcuts2.png" />
 <br />
-Type your custom command (ie CTRL+SHIFT+F) and press 'OK'
-<img src="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/google-webstore/setupkeyboardshortcuts3.png" />
+Type your custom command (ie CTRL+SHIFT+F)
 <br />
 Now whenever, you want to open the popup simply enter your custom command.
 
