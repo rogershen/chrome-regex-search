@@ -231,6 +231,20 @@ document.getElementById('insensitive').addEventListener('click', function() {
   toggleCaseInsensitive();
 });
 
+document.getElementById('copy-to-clipboard').addEventListener('click', function () {
+  chrome.tabs.query({
+      'active': true,
+      'currentWindow': true
+    },
+    function (tabs) {
+      if ('undefined' != typeof tabs[0].id && tabs[0].id) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+          'message': 'copyToClipboard'
+        });
+      }
+    });
+});
+
 /* Received returnSearchInfo message, populate popup UI */ 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if ('returnSearchInfo' == request.message) {

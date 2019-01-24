@@ -210,11 +210,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if ('search' == request.message) {
     search(request.regexString, request.configurationChanged);
   }
-});
-
-/* Received selectNextNode message, select next regex match */
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if ('selectNextNode' == request.message) {
+  /* Received selectNextNode message, select next regex match */
+  else if ('selectNextNode' == request.message) {
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
       'selectedColor' : DEFAULT_SELECTED_COLOR
@@ -224,11 +221,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       }
     );
   }
-});
-
-/* Received selectPrevNode message, select previous regex match */
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if ('selectPrevNode' == request.message) {
+  /* Received selectPrevNode message, select previous regex match */
+  else if ('selectPrevNode' == request.message) {
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
       'selectedColor' : DEFAULT_SELECTED_COLOR
@@ -238,11 +232,22 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       }
     );
   }
-});
-
-/* Received getSearchInfo message, return search information for this tab */
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if ('getSearchInfo' == request.message) {
+  else if ('copyToClipboard' == request.message) {
+    var clipboardHelper = document.createElement('textarea');
+    try {
+      var text = searchInfo.highlightedNodes.map(function (n) {
+        return n.innerText;
+      }).join('\n');
+      clipboardHelper.appendChild(document.createTextNode(text));
+      document.body.appendChild(clipboardHelper);
+      clipboardHelper.select();
+      document.execCommand('copy');
+    } finally {
+      document.body.removeChild(clipboardHelper);
+    }
+  }
+  /* Received getSearchInfo message, return search information for this tab */
+  else if ('getSearchInfo' == request.message) {
     sendResponse({message: "I'm alive!"});
     returnSearchInfo('getSearchInfo');
   }
