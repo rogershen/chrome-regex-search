@@ -8,6 +8,7 @@ var WHITE_COLOR = '#ffffff';
 var ERROR_COLOR = '#ff8989';
 var GOOD_COLOR = '#89ff89';
 var DEFAULT_INSTANT_RESULTS = true;
+var DEFAULT_CONTEXT_MENU = true;
 /*** CONSTANTS ***/
 
 /*** FUNCTIONS ***/
@@ -45,6 +46,15 @@ function validateMaxResults() {
   return false;
 }
 
+/* Show/hide context menu */
+function triggerContextMenu(checked) {
+  chrome.runtime.sendMessage({
+    'message' : 'triggerContextMenu',
+    visible: !!checked
+  });
+  return checked;
+}
+
 /* Save options to storage */
 function saveOptions() {
   var maxResults = validateMaxResults();
@@ -54,6 +64,7 @@ function saveOptions() {
       'selectedColor' : document.getElementById('selectedColor').value,
       'textColor' : document.getElementById('textColor').value,
       'maxResults' : maxResults,
+      'contextMenu': triggerContextMenu(document.getElementById('contextMenu').checked),
       'instantResults' :  document.getElementById('instantResults').checked,
       'maxHistoryLength' : document.getElementById('maxHistoryLength').value
     }
@@ -71,6 +82,7 @@ function loadOptions() {
     'selectedColor' : DEFAULT_SELECTED_COLOR,
     'textColor' : DEFAULT_TEXT_COLOR,
     'maxResults' : DEFAULT_MAX_RESULTS,
+    'contextMenu': DEFAULT_CONTEXT_MENU,
     'instantResults' : DEFAULT_INSTANT_RESULTS,
     'maxHistoryLength' : DEFAULT_MAX_HISTORY_LENGTH }, 
     function(result) {
@@ -82,6 +94,7 @@ function loadOptions() {
       document.getElementById('exampleHighlighted').style.color = result.textColor;
       document.getElementById('exampleSelected').style.color = result.textColor;
       document.getElementById('maxResults').value = result.maxResults;
+      document.getElementById('contextMenu').checked = triggerContextMenu(result.contextMenu);
       document.getElementById('instantResults').checked = result.instantResults;
       document.getElementById('maxHistoryLength').value = result.maxHistoryLength;
     }
@@ -126,6 +139,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   document.getElementById('maxHistoryLength').addEventListener('change', function() {
+    saveOptions();
+  });
+
+  document.getElementById('contextMenu').addEventListener('change', function() {
     saveOptions();
   });
   
