@@ -8,6 +8,7 @@ var WHITE_COLOR = '#ffffff';
 var ERROR_COLOR = '#ff8989';
 var GOOD_COLOR = '#89ff89';
 var DEFAULT_INSTANT_RESULTS = true;
+var DEFAULT_KEEP_LAST_SEARCH = true;
 /*** CONSTANTS ***/
 
 /*** FUNCTIONS ***/
@@ -18,7 +19,7 @@ function markStatus(text, time){
   status.textContent = text;
   setTimeout(function() {
     status.textContent = '';
-  }, time); 
+  }, time);
 }
 
 /* Validate input for max results */
@@ -55,9 +56,10 @@ function saveOptions() {
       'textColor' : document.getElementById('textColor').value,
       'maxResults' : maxResults,
       'instantResults' :  document.getElementById('instantResults').checked,
+      'keepLastSearch' : document.getElementById('keepLastSearch').checked,
       'maxHistoryLength' : document.getElementById('maxHistoryLength').value
     }
-    
+
     chrome.storage.local.set(options, function() {
       markStatus('New settings saved');
     });
@@ -72,7 +74,8 @@ function loadOptions() {
     'textColor' : DEFAULT_TEXT_COLOR,
     'maxResults' : DEFAULT_MAX_RESULTS,
     'instantResults' : DEFAULT_INSTANT_RESULTS,
-    'maxHistoryLength' : DEFAULT_MAX_HISTORY_LENGTH }, 
+    'keepLastSearch' : DEFAULT_KEEP_LAST_SEARCH,
+    'maxHistoryLength' : DEFAULT_MAX_HISTORY_LENGTH },
     function(result) {
       document.getElementById('highlightColor').value = result.highlightColor;
       document.getElementById('exampleHighlighted').style.backgroundColor = result.highlightColor;
@@ -83,6 +86,7 @@ function loadOptions() {
       document.getElementById('exampleSelected').style.color = result.textColor;
       document.getElementById('maxResults').value = result.maxResults;
       document.getElementById('instantResults').checked = result.instantResults;
+      document.getElementById('keepLastSearch').checked = result.keepLastSearch;
       document.getElementById('maxHistoryLength').value = result.maxHistoryLength;
     }
   );
@@ -105,18 +109,18 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('exampleHighlighted').style.backgroundColor = document.getElementById('highlightColor').value;
     saveOptions();
   });
-  
+
   document.getElementById('selectedColor').addEventListener('change', function() {
     document.getElementById('exampleSelected').style.backgroundColor = document.getElementById('selectedColor').value;
     saveOptions();
   });
-  
+
   document.getElementById('textColor').addEventListener('change', function() {
     document.getElementById('exampleHighlighted').style.color = document.getElementById('textColor').value;
     document.getElementById('exampleSelected').style.color = document.getElementById('textColor').value;
     saveOptions();
   });
-  
+
   document.getElementById('maxResults').addEventListener('change', function() {
     saveOptions();
   });
@@ -125,14 +129,18 @@ document.addEventListener('DOMContentLoaded', function() {
     saveOptions();
   });
 
+  document.getElementById('keepLastSearch').addEventListener('change', function() {
+    saveOptions();
+  });
+
   document.getElementById('maxHistoryLength').addEventListener('change', function() {
     saveOptions();
   });
-  
+
   document.getElementById('buttonSave').addEventListener('click', function() {
     saveOptions();
   });
-  
+
   document.getElementById('buttonReset').addEventListener('click', function() {
     restoreDefaults();
   });
