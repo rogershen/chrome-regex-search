@@ -1,5 +1,6 @@
 /*** CONSTANTS ***/
 var DEFAULT_INSTANT_RESULTS = true;
+var DEFAULT_KEEP_LAST_SEARCH = true;
 var ERROR_COLOR = '#ff8989';
 var WHITE_COLOR = '#ffffff';
 var ERROR_TEXT = "Content script was not loaded. Are you currently in the Chrome Web Store or in a chrome:// page? If you are, content scripts won't work here. If not, please wait for the page to finish loading or refresh the page.";
@@ -18,6 +19,9 @@ var sentInput = false;
 var processingKey = false;
 var searchHistory = null;
 var maxHistoryLength = MAX_HISTORY_LENGTH;
+// Flag dictates if we want to store the last searched regex in memory,
+// pre-populating the regex bar if it exists.
+var keepLastSearch = DEFAULT_KEEP_LAST_SEARCH;
 /*** VARIABLES ***/
 
 /*** FUNCTIONS ***/
@@ -86,6 +90,9 @@ function passInputToContentScript(configurationChanged){
             'getNext' : true
           });
           sentInput = true;
+        }
+        if (keepLastSearch) {
+          chrome.storage.local.set({lastSearch: regexString});
         }
       }
     );
@@ -254,9 +261,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     } else {
       document.getElementById('numResults').textContent = String(request.currentSelection) + ' of ' + String(request.numResults);
     }
-    if (!sentInput) {
-      document.getElementById('inputRegex').value = request.regexString;
-    }
     if (request.numResults > 0 && request.cause == 'selectNode') {
       addToHistory(request.regexString);
     }
@@ -292,7 +296,9 @@ chrome.storage.local.get({
     'instantResults' : DEFAULT_INSTANT_RESULTS,
     'maxHistoryLength' : MAX_HISTORY_LENGTH,
     'searchHistory' : null,
-    'isSearchHistoryVisible' : false},
+    'isSearchHistoryVisible' : false,
+    'keepLastSearch' : DEFAULT_KEEP_LAST_SEARCH,
+    'lastSearch' : ''},
   function(result) {
     if(result.instantResults) {
       document.getElementById('inputRegex').addEventListener('input', function() {
@@ -304,6 +310,11 @@ chrome.storage.local.get({
       });
     }
     console.log(result);
+
+    keepLastSearch = result.keepLastSearch;
+    if (keepLastSearch) {
+      document.getElementById('inputRegex').value = result.lastSearch;
+    }
     if(result.maxHistoryLength) {
       maxHistoryLength = result.maxHistoryLength;
     }
