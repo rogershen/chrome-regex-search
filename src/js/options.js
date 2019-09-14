@@ -18,7 +18,7 @@ function markStatus(text, time){
   status.textContent = text;
   setTimeout(function() {
     status.textContent = '';
-  }, time); 
+  }, time);
 }
 
 /* Validate input for max results */
@@ -57,7 +57,7 @@ function saveOptions() {
       'instantResults' :  document.getElementById('instantResults').checked,
       'maxHistoryLength' : document.getElementById('maxHistoryLength').value
     }
-    
+
     chrome.storage.local.set(options, function() {
       markStatus('New settings saved');
     });
@@ -72,7 +72,7 @@ function loadOptions() {
     'textColor' : DEFAULT_TEXT_COLOR,
     'maxResults' : DEFAULT_MAX_RESULTS,
     'instantResults' : DEFAULT_INSTANT_RESULTS,
-    'maxHistoryLength' : DEFAULT_MAX_HISTORY_LENGTH }, 
+    'maxHistoryLength' : DEFAULT_MAX_HISTORY_LENGTH },
     function(result) {
       document.getElementById('highlightColor').value = result.highlightColor;
       document.getElementById('exampleHighlighted').style.backgroundColor = result.highlightColor;
@@ -105,18 +105,18 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('exampleHighlighted').style.backgroundColor = document.getElementById('highlightColor').value;
     saveOptions();
   });
-  
+
   document.getElementById('selectedColor').addEventListener('change', function() {
     document.getElementById('exampleSelected').style.backgroundColor = document.getElementById('selectedColor').value;
     saveOptions();
   });
-  
+
   document.getElementById('textColor').addEventListener('change', function() {
     document.getElementById('exampleHighlighted').style.color = document.getElementById('textColor').value;
     document.getElementById('exampleSelected').style.color = document.getElementById('textColor').value;
     saveOptions();
   });
-  
+
   document.getElementById('maxResults').addEventListener('change', function() {
     saveOptions();
   });
@@ -128,11 +128,11 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('maxHistoryLength').addEventListener('change', function() {
     saveOptions();
   });
-  
+
   document.getElementById('buttonSave').addEventListener('click', function() {
     saveOptions();
   });
-  
+
   document.getElementById('buttonReset').addEventListener('click', function() {
     restoreDefaults();
   });

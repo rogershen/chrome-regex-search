@@ -245,7 +245,7 @@ document.getElementById('copy-to-clipboard').addEventListener('click', function 
     });
 });
 
-/* Received returnSearchInfo message, populate popup UI */ 
+/* Received returnSearchInfo message, populate popup UI */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if ('returnSearchInfo' == request.message) {
     processingKey = false;
@@ -340,7 +340,7 @@ function(tabs) {
 
 /* Focus onto input form */
 document.getElementById('inputRegex').focus();
-window.setTimeout( 
+window.setTimeout(
   function(){document.getElementById('inputRegex').select();}, 0);
 //Thanks to http://stackoverflow.com/questions/480735#comment40578284_14573552
 
@@ -350,4 +350,3 @@ chrome.storage.local.set({isSearchHistoryVisible: makeVisible});
 
 setCaseInsensitiveElement();
 /*** INIT ***/
-

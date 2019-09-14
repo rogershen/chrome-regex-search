@@ -15,13 +15,13 @@ var DEFAULT_CASE_INSENSITIVE = false;
 /*** VARIABLES ***/
 var searchInfo;
 /*** VARIABLES ***/
-                     
+
 /*** LIBRARY FUNCTIONS ***/
 Element.prototype.documentOffsetTop = function () {
   return this.offsetTop + ( this.offsetParent ? this.offsetParent.documentOffsetTop() : 0 );
 };
 Element.prototype.visible = function() {
-    return (!window.getComputedStyle(this) || window.getComputedStyle(this).getPropertyValue('display') == '' || 
+    return (!window.getComputedStyle(this) || window.getComputedStyle(this).getPropertyValue('display') == '' ||
            window.getComputedStyle(this).getPropertyValue('display') != 'none')
 }
 /*** LIBRARY FUNCTIONS ***/
@@ -57,7 +57,7 @@ function isTextNode(node) {
 
 /* Check if the given node is an expandable node that will yield text nodes */
 function isExpandable(node) {
-  return node && node.nodeType === ELEMENT_NODE_TYPE && node.childNodes && 
+  return node && node.nodeType === ELEMENT_NODE_TYPE && node.childNodes &&
          !UNEXPANDABLE.test(node.tagName) && node.visible();
 }
 
@@ -73,7 +73,7 @@ function highlight(regex, highlightColor, selectedColor, textColor, maxResults) 
         var matchedText = node.data.match(regex)[0];
         var matchedTextNode = node.splitText(index);
         matchedTextNode.splitText(matchedText.length);
-        var spanNode = document.createElement(HIGHLIGHT_TAG); 
+        var spanNode = document.createElement(HIGHLIGHT_TAG);
         spanNode.className = HIGHLIGHT_CLASS;
         spanNode.style.backgroundColor = highlightColor;
         spanNode.style.color = textColor;
@@ -107,7 +107,7 @@ function removeHighlight() {
 
 /* Scroll page to given element */
 function scrollToElement(element) {
-    element.scrollIntoView(); 
+    element.scrollIntoView();
     var top = element.documentOffsetTop() - ( window.innerHeight / 2 );
     window.scrollTo( 0, Math.max(top, window.pageYOffset - (window.innerHeight/2))) ;
 }
@@ -136,13 +136,13 @@ function selectNode(highlightedColor, selectedColor, getNext) {
     searchInfo.highlightedNodes[searchInfo.selectedIndex].style.backgroundColor = highlightedColor;
       if(getNext) {
         if(searchInfo.selectedIndex === length - 1) {
-          searchInfo.selectedIndex = 0; 
+          searchInfo.selectedIndex = 0;
         } else {
           searchInfo.selectedIndex += 1;
         }
       } else {
         if(searchInfo.selectedIndex === 0) {
-          searchInfo.selectedIndex = length - 1; 
+          searchInfo.selectedIndex = length - 1;
         } else {
           searchInfo.selectedIndex -= 1;
         }
@@ -161,7 +161,7 @@ function selectNode(highlightedColor, selectedColor, getNext) {
 }
 /* Forward cycle through regex matched elements */
 function selectNextNode(highlightedColor, selectedColor) {
-  selectNode(highlightedColor, selectedColor, true); 
+  selectNode(highlightedColor, selectedColor, true);
 }
 
 /* Backward cycle through regex matched elements */
@@ -189,7 +189,7 @@ function search(regexString, configurationChanged) {
       'selectedColor' : DEFAULT_SELECTED_COLOR,
       'textColor' : DEFAULT_TEXT_COLOR,
       'maxResults' : DEFAULT_MAX_RESULTS,
-      'caseInsensitive' : DEFAULT_CASE_INSENSITIVE}, 
+      'caseInsensitive' : DEFAULT_CASE_INSENSITIVE},
       function(result) {
         initSearchInfo(regexString);
         if(result.caseInsensitive){
@@ -203,7 +203,7 @@ function search(regexString, configurationChanged) {
   } else if (regex && regexString != '' && regexString === searchInfo.regexString) { // elements are already highlighted
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
-      'selectedColor' : DEFAULT_SELECTED_COLOR}, 
+      'selectedColor' : DEFAULT_SELECTED_COLOR},
       function(result) {
         selectNextNode(result.highlightColor, result.selectedColor);
       }
@@ -227,7 +227,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
       'selectedColor' : DEFAULT_SELECTED_COLOR
-      }, 
+      },
       function(result) {
         selectNextNode(result.highlightColor, result.selectedColor);
       }
@@ -238,7 +238,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     chrome.storage.local.get({
       'highlightColor' : DEFAULT_HIGHLIGHT_COLOR,
       'selectedColor' : DEFAULT_SELECTED_COLOR
-      }, 
+      },
       function(result) {
         selectPrevNode(result.highlightColor, result.selectedColor);
       }
