@@ -5,30 +5,30 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
     <style type="text/css">
+      body {
+        background-color: #fff;
+        border-radius: 5px;
+      }
+
       a:link, a:visited {
         display: block;
         width: 2em;  
         padding: 10px 5px;
-        background-color: #f2f2f2;
-        border: 1px solid transparent;
-        border-color: #aaa;
+        /*background-color: #f2f2f2;*/
+        /*border: 1px solid transparent;*/
+        /*border-color: #aaa;*/
         color: #000;
         text-align: center;
-        -webkit-box-shadow: inset 0 0 30px #fff;
-        box-shadow: inset 0 0 30px #fff;
-        border-radius: 2px;
+        /*-webkit-box-shadow: inset 0 0 30px #fff;*/
+        /*box-shadow: inset 0 0 30px #fff;*/
+        /*border-radius: 2px;*/
       }
-      a.selected {
+
+      a:hover, a.selected {
         background-color: #eaeaea;
-        color: #000;
-        -webkit-box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
-        box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
-      }
-      a:hover {
-        background-color: #dadada;
-        color: #000;
-        -webkit-box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
-        box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
+        color: #007BFF;
+        /*-webkit-box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);*/
+        /*box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);*/
       }
 
       .flexContainer {
@@ -55,7 +55,7 @@
         top: 1em;
         right: 17em;
         min-width: 4em;
-        max-width: 5em;
+        max-width: 6em;
         overflow:auto;
         white-space: nowrap;
         font-size: 10pt;
@@ -64,18 +64,22 @@
       #history {
         display: none;
         font-size: 1rem;
-        margin: 10px;
+        list-style: none;
       }
+        #history li { padding: 5px; margin-left: -30px; }
+        #history li:hover { background: #eee; }
+
       .historyDeleteEntry {
         color: #721C24;
         cursor: pointer;
         margin-right: 5px;
         font-size: 1rem;
+        float: right;
       }
       .historyLink {
         color: #0C5460;
         cursor: pointer;
-        line-height: 2rem;
+        line-height: 1rem;
       }
       .historyIsEmptyMessage {
         font-style: italic;
@@ -91,12 +95,11 @@
         margin-bottom: 0.2em;
       }
 
-      body {
-        background-color: #dddddd;
-      }
       .error-chrome-regex {
-        color: #FF0000;
+        color: #721C24;
+        display: block;
       }
+
     </style>
   </head>
   <body>
@@ -109,9 +112,9 @@
         <a href="#" id="clear" type="button" title="Clear"><i class="fa fa-trash-o"></i></a>
         <a href="#" class="selected" id="show-history" type="button" title="History"><i class="fa fa-history"></i></a>
     </div>
-  <div id="history"></div>
-  <span id="error" class="error-chrome-regex"></span>
+    <ul id="history"></ul>
+    <div id="error" class="error-chrome-regex"></div>
 
-  </body>
   <script type="text/javascript" src="js/popup.js"></script>
+  </body>
 </html>

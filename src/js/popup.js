@@ -115,7 +115,7 @@ function createHistoryLineElement(text) {
       document.getElementById('inputRegex').focus();
     }
   });
-  var lineDiv = document.createElement('div');
+  var lineDiv = document.createElement('li');
   lineDiv.appendChild(deleteEntrySpan);
   lineDiv.appendChild(linkSpan);
   return lineDiv;
