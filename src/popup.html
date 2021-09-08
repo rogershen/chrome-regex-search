@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <title>Chrome Regex Search</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
     <style type="text/css">
       a:link, a:visited {
         display: block;
@@ -11,7 +11,7 @@
         line-height: 1.6;
         background-color: #f2f2f2;
         border: 1px solid transparent;
-         border-color: #aaa;
+        border-color: #aaa;
         color: #000;
         text-decoration: bold;
         text-align: center;
@@ -19,41 +19,34 @@
         -webkit-box-shadow: inset 0 0 30px #fff;
         box-shadow: inset 0 0 30px #fff;
         border-radius: 2px;
-        -webkit-text-stroke: 2px rgba(0,0,0,1);
       }
       a.selected {
         background-color: #eaeaea;
         color: #000;
         -webkit-box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
-               box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
+        box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
       }
       a:hover {
         background-color: #dadada;
         color: #000;
-       -webkit-box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
-               box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
+        -webkit-box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
+        box-shadow: inset 0 3px 3px rgba(0, 0, 0, .125);
       }
-      #insensitive {
-        -webkit-text-stroke: 1px rgba(0,0,0,1);
-      }
-      #clear {
-        -webkit-text-stroke: 1px rgba(0,0,0,1);
-      }
-      #show-history {
-        -webkit-text-stroke: 0px;
-      }
+
       .flexContainer {
         position: relative;
         text-align: right;
         display: flex;
       }
+
       #inputRegex {
         width: 22em;
         border-radius: 2px;
         padding-right: 5em;
-       -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .125);
-               box-shadow: 0 1px 1px rgba(0, 0, 0, .125);
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .125);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .125);
       }
+
       #numResults {
         position: absolute;
         top: 0.25em;
@@ -65,6 +58,7 @@
         height: 1.6;
         font-size: 10pt;
       }
+
       #history {
         margin: 4px 2px;
         display: none;
@@ -106,7 +100,7 @@
       <input id="inputRegex" type="text" name="inputRegex"></input><span id="numResults"></span>
       <a href="#" id="prev" type="button" title="Previous Match"><i class="fa fa-angle-up"></i></a>
       <a href="#" id="next" type="button" title="Next Match"><i class="fa fa-angle-down"></i></a>
-      <a href="#" id="insensitive" type="button" title="Case Insensitive"><i class="fa fa-info"></i></a>
+      <a href="#" id="insensitive" type="button" title="Case Insensitive"><i class="fa fa-flag"></i></a>
       <a href="#" id="copy-to-clipboard" type="button" title="Copy matches to clipboard"><i class="fa fa-copy"></i></a>
       <a href="#" id="clear" type="button" title="Clear"><i class="fa fa-trash-o"></i></a>
       <a href="#" class="selected" id="show-history" type="button" title="History"><i class="fa fa-history"></i></a>
