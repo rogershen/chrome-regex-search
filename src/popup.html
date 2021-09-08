@@ -3,7 +3,7 @@
   <head>
     <title>Chrome Regex Search</title>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <style type="text/css">
       body {
         background-color: #fff;
@@ -66,7 +66,11 @@
         font-size: 1rem;
         list-style: none;
       }
-        #history li { padding: 5px; margin-left: -30px; }
+        #history li {
+          padding: 5px;
+          margin-left: -30px;
+          font-family: monospace;
+        }
         #history li:hover { background: #eee; }
 
       .historyDeleteEntry {
@@ -105,12 +109,12 @@
   <body>
     <div class="flexContainer">
       <input id="inputRegex" type="text" name="inputRegex"></input><span id="numResults">0 of 0</span>
-        <a href="#" id="prev" type="button" title="Previous Match"><i class="fa fa-angle-up"></i></a>
-        <a href="#" id="next" type="button" title="Next Match"><i class="fa fa-angle-down"></i></a>
-        <a href="#" id="insensitive" type="button" title="Case Insensitive"><i class="fa fa-flag"></i></a>
-        <a href="#" id="copy-to-clipboard" type="button" title="Copy matches to clipboard"><i class="fa fa-copy"></i></a>
-        <a href="#" id="clear" type="button" title="Clear"><i class="fa fa-trash-o"></i></a>
-        <a href="#" class="selected" id="show-history" type="button" title="History"><i class="fa fa-history"></i></a>
+        <a href="#" id="prev" type="button" title="Previous Match"><i class="fas fa-chevron-up"></i></a>
+        <a href="#" id="next" type="button" title="Next Match"><i class="fas fa-chevron-down"></i></a>
+        <a href="#" id="insensitive" type="button" title="Case Insensitive"><i class="far fa-flag"></i></a>
+        <a href="#" id="copy-to-clipboard" type="button" title="Copy matches to clipboard"><i class="far fa-copy"></i></a>
+        <a href="#" id="clear" type="button" title="Clear"><i class="far fa-trash-alt"></i></a>
+        <a href="#" class="selected" id="show-history" type="button" title="History"><i class="fas fa-history"></i></a>
     </div>
     <ul id="history"></ul>
     <div id="error" class="error-chrome-regex"></div>
