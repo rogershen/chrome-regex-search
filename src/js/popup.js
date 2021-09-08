@@ -2,7 +2,7 @@
 var DEFAULT_INSTANT_RESULTS = true;
 var ERROR_COLOR = '#F8D7DA';
 var WHITE_COLOR = '#ffffff';
-var ERROR_TEXT = "Content script was not loaded. Are you currently in the Chrome Web Store or in a chrome:// page? If you are, content scripts won't work here. If not, please wait for the page to finish loading or refresh the page.";
+var ERROR_TEXT = "Content script was not loaded on this url or please wait for the page to load.";
 var SHOW_HISTORY_TITLE = "Show search history";
 var HIDE_HISTORY_TITLE = "Hide search history";
 var ENABLE_CASE_INSENSITIVE_TITLE = "Enable case insensitive search";
