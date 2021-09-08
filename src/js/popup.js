@@ -94,8 +94,7 @@ function passInputToContentScript(configurationChanged){
 
 function createHistoryLineElement(text) {
   var deleteEntrySpan = document.createElement('span');
-  deleteEntrySpan.className = 'historyDeleteEntry'
-  deleteEntrySpan.textContent = '\u2715';
+  deleteEntrySpan.className = 'historyDeleteEntry fas fa-times'
   deleteEntrySpan.addEventListener('click', function() {
     for (var i = searchHistory.length - 1; i >= 0; i--) {
       if (searchHistory[i] == text) {
