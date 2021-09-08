@@ -39,6 +39,7 @@
 
       #inputRegex {
         font-family: monospace;
+        font-size: 1rem;
         padding: 10px;
         width: 22em;
         border-radius: 2px;
@@ -48,14 +49,15 @@
       }
 
       #numResults {
+        color: #aaa;
+        font-family: monospace;
         position: absolute;
-        top: 0.25em;
-        right: 14.5em;
+        top: 1em;
+        right: 17em;
         min-width: 4em;
         max-width: 5em;
         overflow:auto;
         white-space: nowrap;
-        height: 1.6;
         font-size: 10pt;
       }
 
@@ -97,15 +99,15 @@
   </head>
   <body>
     <div class="flexContainer">
-      <input id="inputRegex" type="text" name="inputRegex"></input><span id="numResults"></span>
-      <a href="#" id="prev" type="button" title="Previous Match"><i class="fa fa-angle-up"></i></a>
-      <a href="#" id="next" type="button" title="Next Match"><i class="fa fa-angle-down"></i></a>
-      <a href="#" id="insensitive" type="button" title="Case Insensitive"><i class="fa fa-flag"></i></a>
-      <a href="#" id="copy-to-clipboard" type="button" title="Copy matches to clipboard"><i class="fa fa-copy"></i></a>
-      <a href="#" id="clear" type="button" title="Clear"><i class="fa fa-trash-o"></i></a>
-      <a href="#" class="selected" id="show-history" type="button" title="History"><i class="fa fa-history"></i></a>
+      <input id="inputRegex" type="text" name="inputRegex"></input><span id="numResults">0 of 0</span>
+        <a href="#" id="prev" type="button" title="Previous Match"><i class="fa fa-angle-up"></i></a>
+        <a href="#" id="next" type="button" title="Next Match"><i class="fa fa-angle-down"></i></a>
+        <a href="#" id="insensitive" type="button" title="Case Insensitive"><i class="fa fa-flag"></i></a>
+        <a href="#" id="copy-to-clipboard" type="button" title="Copy matches to clipboard"><i class="fa fa-copy"></i></a>
+        <a href="#" id="clear" type="button" title="Clear"><i class="fa fa-trash-o"></i></a>
+        <a href="#" class="selected" id="show-history" type="button" title="History"><i class="fa fa-history"></i></a>
     </div>
-    <div id="history">
+  <div id="history">
     </div>
     <span id="error" class="error-chrome-regex"></span>
   </body>
