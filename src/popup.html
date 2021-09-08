@@ -14,14 +14,9 @@
         display: block;
         width: 2em;  
         padding: 10px 5px;
-        /*background-color: #f2f2f2;*/
-        /*border: 1px solid transparent;*/
-        /*border-color: #aaa;*/
         color: #000;
         text-align: center;
-        /*-webkit-box-shadow: inset 0 0 30px #fff;*/
-        /*box-shadow: inset 0 0 30px #fff;*/
-        /*border-radius: 2px;*/
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
       }
 
       a:hover, a.selected {
@@ -91,12 +86,21 @@
       }
       
       .clearHistoryButton {
-        color: #000; 
+        width:  7rem !important;
         text-decoration: none;
-        float: left !important;
-        width: 7em !important;
-        -webkit-text-stroke: 0.5px rgba(0,0,0,1) !important;
-        margin-bottom: 0.2em;
+        display: inline-block;
+        float: right;
+        margin: 10px;
+        color: #212529;
+        text-align: left;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        background-color: transparent;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        border-radius: .25rem;
       }
 
       .error-chrome-regex {
