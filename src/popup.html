@@ -49,7 +49,7 @@
       }
 
       #numResults {
-        color: #aaa;
+        color: #818182;
         font-family: monospace;
         position: absolute;
         top: 1em;
@@ -62,18 +62,20 @@
       }
 
       #history {
-        margin: 4px 2px;
         display: none;
+        font-size: 1rem;
+        margin: 10px;
       }
       .historyDeleteEntry {
-        color: #c00;
+        color: #721C24;
         cursor: pointer;
-        margin-right: 4px;
-        font-size: 0.8em;
+        margin-right: 5px;
+        font-size: 1rem;
       }
       .historyLink {
-        color: #09d;
+        color: #0C5460;
         cursor: pointer;
+        line-height: 2rem;
       }
       .historyIsEmptyMessage {
         font-style: italic;
@@ -107,9 +109,9 @@
         <a href="#" id="clear" type="button" title="Clear"><i class="fa fa-trash-o"></i></a>
         <a href="#" class="selected" id="show-history" type="button" title="History"><i class="fa fa-history"></i></a>
     </div>
-  <div id="history">
-    </div>
-    <span id="error" class="error-chrome-regex"></span>
+  <div id="history"></div>
+  <span id="error" class="error-chrome-regex"></span>
+
   </body>
   <script type="text/javascript" src="js/popup.js"></script>
 </html>
