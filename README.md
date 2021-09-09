@@ -34,3 +34,11 @@ Note that textarea and input elements will not be highlighted as they cannot be 
 ## License
 
 Chrome Regex Search is under the MIT license. See the <a href="https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/LICENSE">LICENSE</a> file for details.
+
+## TODO
+
+- [] UPDATE: change inputbox to content-editable box with pre-sets
+- [] BUG: unable to search on nav list items on page
+- [] BUG: when reopening plugin from shortcut, should keep the text highlighted
+- [] UPDATE: change the logo / branding
+- [] UPDATE: dropdown for flag options

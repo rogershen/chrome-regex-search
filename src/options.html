@@ -74,7 +74,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">What's the maximum number of regex matches that should be highlighted on the web page?</div>
           <div class="panel-body">
-            <label for="maxResults">Max results</label> <input id="maxResults" type="text" name="maxResults" ></input>
+            <label for="maxResults">Max results</label> <input id="maxResults" type="number" max=500 min=1 step=1 name="maxResults"></input>
             <br />
             <small>The smaller this number is, the better your performance (especially for complex pages).</small>
           </div>
@@ -82,7 +82,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">What's the maximum number of search history records that should be stored??</div>
           <div class="panel-body">
-            <label for="maxHistoryLength">Max records</label> <input id="maxHistoryLength" type="text" name="maxHistoryLength" ></input>
+            <label for="maxHistoryLength">Max records</label> <input id="maxHistoryLength" type="number" min=5 max=50 name="maxHistoryLength" step=1></input>
             <br />
             <small>The default number of records is 30.</small>
           </div>
