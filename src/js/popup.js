@@ -72,10 +72,10 @@ function passInputToContentScript(){
   passInputToContentScript(false);
 }
 
-function passInputToContentScript(configurationChanged){
-  if (!processingKey) {
+function passInputToContentScript(configurationChanged) {
+  if(!processingKey) {
     var regexString = txt_regex.value;
-    if  (!isValidRegex(regexString)) {
+    if(!isValidRegex(regexString)) {
       txt_regex.style.backgroundColor = ERROR_COLOR;
     } else {
       txt_regex.style.backgroundColor = WHITE_COLOR;
@@ -83,7 +83,7 @@ function passInputToContentScript(configurationChanged){
     chrome.tabs.query(
       { 'active': true, 'currentWindow': true },
       function(tabs) {
-        if ('undefined' != typeof tabs[0].id && tabs[0].id) {
+        if('undefined' != typeof tabs[0].id && tabs[0].id) {
           processingKey = true;
           chrome.tabs.sendMessage(tabs[0].id, {
             'message' : 'search',
@@ -93,6 +93,7 @@ function passInputToContentScript(configurationChanged){
           });
           sentInput = true;
         }
+        chrome.storage.local.set({lastSearch: regexString});
       }
     );
   }
