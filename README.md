@@ -1,6 +1,6 @@
 # Chrome Regex Search
 
-![Logo](https://raw.githubusercontent.com/rogershen/chrome-regex-search/master/src/icons/icons_128.png)
+![Logo](icons/icons_96.png)
 
 An extension for Regex Search in lieu of Chrome's CTRL+F.
 

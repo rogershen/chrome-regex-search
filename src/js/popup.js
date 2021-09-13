@@ -25,6 +25,120 @@ let txt_regex = document.getElementById('inputRegex');
 let num_results = document.getElementById('numResults');
 let btn_next = document.getElementById('next');
 let btn_prev = document.getElementById('prev');
+let btn_flag = document.getElementById('insensitive');
+
+/**
+ * will maintain most recent maxlen items
+ */
+class RegExHistory {
+  constructor(maxlen=maxHistoryLength) {
+    this.maxlen = maxlen
+    this.history = []
+    this.i = 0
+    chrome.storage.local.set({
+      // 'instantResults': DEFAULT_INSTANT_RESULTS,
+      // 'maxHistoryLength': MAX_HISTORY_LENGTH,
+      'searchHistory': [],
+      // 'isSearchHistoryVisible': false,
+    })
+  }
+
+  is_empty() {
+    return this.history.length === 0
+  }
+
+  clear() {
+    this.history = []
+    this.i = 0
+    return this
+  }
+
+  next() {
+    if(this.i >= this.history.length)
+      return false
+    return this.history[this.i++]
+  }
+
+  prev() {
+    if(this.i <= 0)
+      return false
+    return this.history[this.i--]
+  }
+
+  add(item) {
+    if(this.history.length >= this.maxlen) {
+      this.history.pop()
+    }
+    this.history.unshift(item)
+    return this
+  }
+}
+
+class RE {
+  constructor(txt, settings={
+    flag_case_sensitivity: true,
+    default_instant_results: true,
+    current_window: true
+  }) {
+    this.txt = txt
+    this.regex = (this.is_valid(txt)) ? new RegExp(txt) : new RegExp()
+    this.settings = settings
+  }
+
+  is_valid(txt) {
+    if(new RegExp(txt))
+      return true
+    return false
+  }
+
+  copy_results() {
+    chrome.tabs.query({
+      'active': true,
+      'currentWindow': true
+    },
+    function (tabs) {
+      if ('undefined' != typeof tabs[0].id && tabs[0].id) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+          'message': 'copyToClipboard'
+        });
+      }
+    });
+
+    return this
+  }
+
+  next_result() {
+    chrome.tabs.query({
+      'active': true,
+      'currentWindow': true
+    },
+    function(tabs) {
+      if('undefined' != typeof tabs[0].id && tabs[0].id) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+          'message' : 'selectNextNode'
+        })
+      }
+    })
+
+    return this
+  }
+
+  prev_result() {
+    chrome.tabs.query({
+      'active': true,
+      'currentWindow': true
+    },
+    function(tabs) {
+      if ('undefined' != typeof tabs[0].id && tabs[0].id) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+          'message' : 'selectPrevNode'
+        })
+      }
+    })
+
+    return this
+  }
+}
 
 /*** FUNCTIONS ***/
 /* Validate that a given pattern string is a valid regex */
@@ -68,9 +182,9 @@ function selectPrev(){
 }
 
 /* Send message to pass input string to content script of tab to find and highlight regex matches */
-function passInputToContentScript(){
-  passInputToContentScript(false);
-}
+// function passInputToContentScript(){
+//   passInputToContentScript(false);
+// }
 
 function passInputToContentScript(configurationChanged) {
   if(!processingKey) {
@@ -103,8 +217,8 @@ function createHistoryLineElement(text) {
   var deleteEntrySpan = document.createElement('span');
   deleteEntrySpan.className = 'historyDeleteEntry fas fa-times'
   deleteEntrySpan.addEventListener('click', function() {
-    for (var i = searchHistory.length - 1; i >= 0; i--) {
-      if (searchHistory[i] == text) {
+    for(let i = searchHistory.length - 1; i >= 0; i--) {
+      if(searchHistory[i] == text) {
         searchHistory.splice(i, 1);
       }
     }
@@ -128,19 +242,24 @@ function createHistoryLineElement(text) {
 }
 
 function updateHistoryDiv() {
-  var historyDiv = document.getElementById('history');
-  if (historyDiv) {
+  let historyDiv = document.getElementById('history');
+  if(historyDiv) {
     historyDiv.innerHTML = '';
-    if (searchHistory.length == 0) {
-      var span = document.createElement('span');
-      span.className = 'historyIsEmptyMessage';
-      span.textContent = HISTORY_IS_EMPTY_TEXT;
-      historyDiv.appendChild(span);
-    } else {
-      for (var i = searchHistory.length - 1; i >= 0; i--) {
+
+    // default history is empty message
+    let span = document.createElement('span');
+    span.className = 'historyIsEmptyMessage';
+    span.textContent = HISTORY_IS_EMPTY_TEXT;
+    historyDiv.appendChild(span);
+
+    if(searchHistory.length != 0) {
+      historyDiv.innerHTML = '';
+      for(let i = searchHistory.length - 1; i >= 0; i--) {
         historyDiv.appendChild(createHistoryLineElement(searchHistory[i]));
       }
-      var clearButton = document.createElement('a');
+
+      // create `Clear History` button
+      let clearButton = document.createElement('a');
       clearButton.href = '#';
       clearButton.type = 'button';
       clearButton.textContent = CLEAR_ALL_HISTORY_TEXT;
@@ -155,33 +274,20 @@ function updateHistoryDiv() {
  * adds search items to local storage list (after user presses enter)
  */
 function addToHistory(regex) {
-  if (regex && searchHistory !== null) {
-    if (searchHistory.length == 0 || searchHistory[searchHistory.length - 1] != regex) {
+  if(regex && searchHistory !== null) {
+    if(searchHistory.length == 0 || searchHistory[searchHistory.length - 1] != regex) {
       searchHistory.push(regex);
     }
-    for (var i = searchHistory.length - 2; i >= 0; i--) {
-      if (searchHistory[i] == regex) {
+    for(let i = searchHistory.length - 2; i >= 0; i--) {
+      if(searchHistory[i] == regex) {
         searchHistory.splice(i, 1);
       }
     }
-    if (searchHistory.length > maxHistoryLength) {
+    if(searchHistory.length > maxHistoryLength) {
       searchHistory.splice(0, searchHistory.length - maxHistoryLength);
     }
     chrome.storage.local.set({searchHistory: searchHistory});
     updateHistoryDiv();
-  }
-}
-
-/**
- * shows and hide list of history items
- */
-function setHistoryVisibility(makeVisible) {
-  document.getElementById('history').style.display = makeVisible ? 'block' : 'none';
-  document.getElementById('show-history').title = makeVisible ? HIDE_HISTORY_TITLE : SHOW_HISTORY_TITLE;
-  if(makeVisible) {
-    document.getElementById('show-history').className = 'selected';
-  } else {
-    document.getElementById('show-history').className = '';
   }
 }
 
@@ -198,25 +304,17 @@ function clearSearchHistory() {
  * Flag for case sensitivity
  */
 function setCaseInsensitiveElement() {
-  var caseInsensitive = chrome.storage.local.get({'caseInsensitive':DEFAULT_CASE_INSENSITIVE},
+  var caseInsensitive = chrome.storage.local.get({'caseInsensitive': DEFAULT_CASE_INSENSITIVE},
   function (result) {
-    document.getElementById('insensitive').title = result.caseInsensitive ? DISABLE_CASE_INSENSITIVE_TITLE : ENABLE_CASE_INSENSITIVE_TITLE;
-    if(result.caseInsensitive) {
-      document.getElementById('insensitive').className = 'selected';
-    } else {
-      document.getElementById('insensitive').className = '';
-    }
+    btn_flag.title = result.caseInsensitive ? DISABLE_CASE_INSENSITIVE_TITLE : ENABLE_CASE_INSENSITIVE_TITLE;
+    btn_flag.className = result.caseInsensitive ? 'selected' : '';
   });
 
 }
 function toggleCaseInsensitive() {
-  var caseInsensitive = document.getElementById('insensitive').className == 'selected';
-  document.getElementById('insensitive').title = caseInsensitive ? ENABLE_CASE_INSENSITIVE_TITLE : DISABLE_CASE_INSENSITIVE_TITLE;
-  if(caseInsensitive) {
-    document.getElementById('insensitive').className = '';
-  } else {
-    document.getElementById('insensitive').className = 'selected';
-  }
+  var caseInsensitive = btn_flag.className == 'selected';
+  btn_flag.title = caseInsensitive ? ENABLE_CASE_INSENSITIVE_TITLE : DISABLE_CASE_INSENSITIVE_TITLE;
+  btn_flag.className = caseInsensitive ? '' : 'selected';
   sentInput = false;
   chrome.storage.local.set({caseInsensitive: !caseInsensitive});
   passInputToContentScript(true);
@@ -240,12 +338,12 @@ document.getElementById('clear').addEventListener('click', function() {
 });
 
 document.getElementById('show-history').addEventListener('click', function() {
-  var makeVisible = document.getElementById('history').style.display == 'none';
-  setHistoryVisibility(makeVisible);
-  chrome.storage.local.set({isSearchHistoryVisible: makeVisible});
+  let makeVisible = document.getElementById('history').style.display == 'none';
+  document.getElementById('history').style.display = makeVisible ? 'block' : 'none';
+  document.getElementById('show-history').className = (makeVisible) ? 'selected' : '';
 });
 
-document.getElementById('insensitive').addEventListener('click', function() {
+btn_flag.addEventListener('click', function() {
   toggleCaseInsensitive();
 });
 
@@ -309,8 +407,8 @@ onkeydown = onkeyup = function(e) {
 chrome.storage.local.get({
     'instantResults' : DEFAULT_INSTANT_RESULTS,
     'maxHistoryLength' : MAX_HISTORY_LENGTH,
-    'searchHistory' : null,
-    'isSearchHistoryVisible' : false
+    'searchHistory' : null
+    // 'isSearchHistoryVisible' : false
   },
   function(result) {
     if(result.instantResults) {
@@ -330,7 +428,8 @@ chrome.storage.local.get({
     } else {
       searchHistory = [];
     }
-    setHistoryVisibility(result.isSearchHistoryVisible);
+    document.getElementById('history').style.display = result.isSearchHistoryVisible ? 'block' : 'none';
+    document.getElementById('show-history').className = (result.isSearchHistoryVisible) ? 'selected' : '';
     updateHistoryDiv();
 });
 
@@ -360,7 +459,8 @@ window.setTimeout(
 //Thanks to http://stackoverflow.com/questions/480735#comment40578284_14573552
 
 var makeVisible = document.getElementById('history').style.display == 'none';
-setHistoryVisibility(makeVisible);
+document.getElementById('history').style.display = makeVisible ? 'block' : 'none';
+document.getElementById('show-history').className = (makeVisible) ? 'selected' : '';
 chrome.storage.local.set({isSearchHistoryVisible: makeVisible});
 
 setCaseInsensitiveElement();
