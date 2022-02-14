@@ -5,6 +5,8 @@ var UNEXPANDABLE = /(script|style|svg|audio|canvas|figure|video|select|input|tex
 var HIGHLIGHT_TAG = 'highlight-tag';
 var HIGHLIGHT_CLASS = 'highlighted';
 var SELECTED_CLASS = 'selected';
+var WRAPPER_CLASS = 'wrapper-span-highlighting';
+var WRAPPER_TAG = 'span';
 var DEFAULT_MAX_RESULTS = 500;
 var DEFAULT_HIGHLIGHT_COLOR = '#ffff00';
 var DEFAULT_SELECTED_COLOR = '#ff9900';
@@ -79,8 +81,11 @@ function highlight(regex, highlightColor, selectedColor, textColor, maxResults) 
         spanNode.style.color = textColor;
         spanNode.appendChild(matchedTextNode.cloneNode(true));
         matchedTextNode.parentNode.replaceChild(spanNode, matchedTextNode);
-        searchInfo.highlightedNodes.push(spanNode);
         searchInfo.length += 1;
+        var parentNode = node.parentNode;
+        parentNode.innerHTML = 
+          `<${WRAPPER_TAG} class="${WRAPPER_CLASS}">${node.parentNode.innerHTML}</${WRAPPER_TAG}>`;
+        searchInfo.highlightedNodes.push(parentNode.querySelector(HIGHLIGHT_TAG + '.' + HIGHLIGHT_CLASS));
         return 1;
       }
     } else if (isExpandable(node)) {
@@ -101,6 +106,9 @@ function removeHighlight() {
     node.outerHTML = node.innerHTML;
   }
     while (node = document.body.querySelector(HIGHLIGHT_TAG + '.' + SELECTED_CLASS)) {
+    node.outerHTML = node.innerHTML;
+  }
+  while (node = document.body.querySelector(HIGHLIGHT_TAG + '.' + WRAPPER_CLASS)) {
     node.outerHTML = node.innerHTML;
   }
 };
