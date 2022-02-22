@@ -173,6 +173,12 @@ function setHistoryVisibility(makeVisible) {
   }
 }
 
+function toggleHistoryVisibility() {
+  var invisibleNow = (document.getElementById('history').style.display === 'none')
+  setHistoryVisibility(invisibleNow);
+  updateHistoryDiv();
+}
+
 function setCaseInsensitiveElement() {
   var caseInsensitive = chrome.storage.local.get({'caseInsensitive':DEFAULT_CASE_INSENSITIVE},
   function (result) {
@@ -183,8 +189,8 @@ function setCaseInsensitiveElement() {
       document.getElementById('insensitive').className = '';
     }
   });
-
 }
+
 function toggleCaseInsensitive() {
   var caseInsensitive = document.getElementById('insensitive').className == 'selected';
   document.getElementById('insensitive').title = caseInsensitive ? ENABLE_CASE_INSENSITIVE_TITLE : DISABLE_CASE_INSENSITIVE_TITLE;
@@ -198,12 +204,27 @@ function toggleCaseInsensitive() {
   passInputToContentScript(true);
 }
 
+function copyToClipboard() {
+  chrome.tabs.query(
+    {
+      'active': true,
+      'currentWindow': true
+    },
+    function (tabs) {
+      if ('undefined' != typeof tabs[0].id && tabs[0].id) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+          'message': 'copyToClipboard'
+        });
+      }
+    }
+  );
+}
+
 function clearSearchHistory() {
   searchHistory = [];
   chrome.storage.local.set({searchHistory: searchHistory});
   updateHistoryDiv();
 }
-
 
 /*** LISTENERS ***/
 document.getElementById('next').addEventListener('click', function() {
@@ -232,17 +253,7 @@ document.getElementById('insensitive').addEventListener('click', function() {
 });
 
 document.getElementById('copy-to-clipboard').addEventListener('click', function () {
-  chrome.tabs.query({
-      'active': true,
-      'currentWindow': true
-    },
-    function (tabs) {
-      if ('undefined' != typeof tabs[0].id && tabs[0].id) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-          'message': 'copyToClipboard'
-        });
-      }
-    });
+  copyToClipboard();
 });
 
 /* Received returnSearchInfo message, populate popup UI */ 
@@ -281,6 +292,22 @@ onkeydown = onkeyup = function(e) {
         }
       } else if (map[16] && map[13]) { //SHIFT + ENTER
         selectPrev();
+      }
+    }
+
+    if (map[18]) {
+      if (map[73]) {
+        // i
+        toggleCaseInsensitive();
+      } else if (map[67]) {
+        // c
+        copyToClipboard();
+      } else if (map[88]) {
+        // x
+        clearSearchHistory();
+      } else if (map[72]) {
+        // h
+        toggleHistoryVisibility();
       }
     }
 }
